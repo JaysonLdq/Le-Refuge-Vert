@@ -29,7 +29,7 @@ services:
     environment:
       # variables d'environnement
       - MYSQL_ROOT_PASSWORD=superAdmin # mot de passe root
-      - MYSQL_DATABASE=leRefugeVert # nom de la base de données
+      - MYSQL_DATABASE=lerefugevert # nom de la base de données
       - MYSQL_USER=admin # nom de l'utilisateur
       - MYSQL_PASSWORD=admin # mot de passe de l'utilisateur
     volumes:
