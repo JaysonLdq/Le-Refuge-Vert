@@ -6,6 +6,7 @@ use App\Entity\Equipement;
 use App\Entity\Logement;
 use App\Entity\Rental;
 use App\Entity\Saison;
+use App\Entity\Tarif;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -32,6 +33,7 @@ class AppFixtures extends Fixture
         $this->loadRental($manager);
         $this->loadEquipment($manager);
         $this->loadLogement($manager);
+        $this->loadTarif($manager);
 
 
         $manager->flush();
@@ -278,4 +280,56 @@ class AppFixtures extends Fixture
 
 
     }
+
+    /**
+/**
+ * méthode pour générer des tarifs
+ * @param ObjectManager $manager
+ * @return void
+ */
+public function loadTarif(ObjectManager $manager): void
+{
+    // Tableau des tarifs avec des IDs existants
+    $array_tarif = [
+        [
+            'saison_id' => 1, 
+            'price' => 110,
+            'logement_id' => 1  
+        ],
+        [
+            'saison_id' => 2,
+            'price' => 50,
+            'logement_id' => 2
+        ],
+        [
+            'saison_id' => 3,
+            'price' => 40,
+            'logement_id' => 3
+        ]
+    ];
+
+    // On boucle sur le tableau pour créer les tarifs
+    foreach($array_tarif as $value)
+    {
+        // On instancie un tarif
+        $tarif = new Tarif(); 
+        $tarif->setPrice($value['price']);
+        
+        // Récupérer l'objet Saison avec l'ID
+        $saison = $manager->getRepository(Saison::class)->find($value['saison_id']);
+        $tarif->setSaison($saison);
+
+        // Récupérer l'objet Logement avec l'ID
+        $logement = $manager->getRepository(Logement::class)->find($value['logement_id']);
+        $tarif->setLogement($logement); // Associer le logement au tarif
+
+        // Persister le tarif dans la base de données
+        $manager->persist($tarif);
+    }
+
+    // Enregistrer tous les changements dans la base de données
+    $manager->flush();
+}
+
+
 }

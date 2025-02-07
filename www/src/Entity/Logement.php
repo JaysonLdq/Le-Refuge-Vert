@@ -46,6 +46,9 @@ class Logement
     #[ORM\ManyToMany(targetEntity: Equipement::class, inversedBy: 'logements')]
     private Collection $equipements;
 
+    #[ORM\ManyToOne(inversedBy: 'logement')]
+    private ?Tarif $tarif = null;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
@@ -181,6 +184,18 @@ class Logement
     public function setSurface(int $surface): static
     {
         $this->surface = $surface;
+
+        return $this;
+    }
+
+    public function getTarif(): ?Tarif
+    {
+        return $this->tarif;
+    }
+
+    public function setTarif(?Tarif $tarif): static
+    {
+        $this->tarif = $tarif;
 
         return $this;
     }
