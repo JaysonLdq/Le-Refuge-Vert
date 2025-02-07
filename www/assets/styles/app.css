@@ -1,130 +1,115 @@
-/* Polices et style de base */
+/* Fond de la page */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f8f4; /* Fond clair inspiré de la nature */
-    color: #333; /* Texte sombre pour contraster avec le fond */
+    background: #c0d1bd;
+    font-family: 'Arial', sans-serif; /* Police standard */
+    color: #333;
     margin: 0;
     padding: 0;
 }
 
-h1, h2 {
-    color: #1b4332; /* Vert plus foncé pour les titres */
-    text-align: center;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    margin-top: 40px;
-}
-
-/* Style pour les tables */
-table {
-    width: 100%;
-    margin: 20px 0;
-    border-collapse: collapse;
-}
-
-table th, table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #d1e7dd; /* Bordure vert pâle pour les lignes */
-}
-
-table th {
-    background-color: #4caf50; /* Vert vif pour les entêtes */
-    color: white;
-    font-weight: bold;
-}
-
-table tr:hover {
-    background-color: #a8d5ba; /* Effet survol d'une ligne avec vert clair */
-}
-
-table td {
-    background-color: #ffffff;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-}
-
-/* Style des listes d'équipements */
-ul.list-group {
-    padding: 0;
-    list-style-type: none;
-    margin-top: 20px;
-}
-
-ul.list-group li {
-    background-color: #d9f7e9; /* Vert clair pour chaque item */
-    border-radius: 5px;
-    margin: 5px 0;
-    padding: 12px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-}
-
 /* Conteneur principal */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    margin-top: 30px;
     padding: 0 20px;
 }
 
-/* Espacements entre les sections */
-.mb-4 {
+/* En-tête de la page */
+h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
     margin-bottom: 40px;
+    font-weight: 600;
 }
 
-/* Section Réservations */
-table {
-    margin-bottom: 40px;
-}
-
-/* Style pour les boutons */
-button, .btn {
-    background-color: #2d6a4f; /* Vert forêt pour les boutons */
-    color: white;
-    border: none;
-    padding: 12px 20px;
+/* Style d'alerte pour la période hors saison */
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    font-weight: bold;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    text-align: center;
-}
-
-button:hover, .btn:hover {
-    background-color: #1b4332; /* Effet hover plus sombre */
-}
-
-/* Style du pied de page */
-footer {
-    background-color: #2d6a4f;
-    color: white;
-    text-align: center;
     padding: 15px;
-    position: fixed;
+    margin-top: 30px;
+}
+
+/* Container global */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Vignettes dans une grille */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacement entre les vignettes */
+    justify-content: center; /* Centrer les vignettes horizontalement */
+}
+
+/* Carte de la vignette */
+/* Carte de la vignette */
+.card {
+    width: 300px; /* Largeur fixe pour chaque vignette */
+    height: 400px; /* Hauteur fixe pour chaque vignette */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Empêche que le contenu dépasse */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Shadow amélioré pour plus d'intensité */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animation au survol */
+}
+
+/* Ajout de l'effet de survol avec une ombre plus forte */
+.card:hover {
+    transform: translateY(-10px); /* Légère translation pour l'effet de survol */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* Shadow plus intense au survol */
+}
+
+/* Optionnel : si tu veux ajouter un fond clair derrière la vignette */
+.card-body {
+    background-color: #fff;
+}
+
+
+/* Image de la vignette */
+.card-img-top {
     width: 100%;
-    bottom: 0;
+    height: 200px;
+    object-fit: cover; /* Garde l'aspect de l'image tout en la recadrant */
 }
 
-footer a {
-    color: #a8d5ba;
-    text-decoration: none;
+/* Corps de la carte contenant le texte */
+.card-body {
+    padding: 15px;
+    background-color: #afd7a9;
+    flex-grow: 1; /* Permet à la description de prendre l'espace restant */
+    display: flex;
+    flex-direction: column;
 }
 
-footer a:hover {
-    text-decoration: underline;
+/* Titre de la carte */
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-/* Media queries pour la réactivité */
-@media screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    table, ul.list-group {
-        font-size: 14px;
-    }
-
-    button, .btn {
-        padding: 10px 16px;
-        font-size: 14px;
-    }
+/* Description */
+.card-text {
+    font-size: 0.9rem;
+    color: #555;
+    flex-grow: 1; /* Permet à la description de s'étendre pour occuper l'espace disponible */
+    margin-bottom: 10px;
+    word-wrap: break-word; /* Assure que le texte s'adapte à l'intérieur de la carte */
+    overflow-wrap: break-word; /* Une autre méthode pour forcer un retour à la ligne si nécessaire */
 }
+
+/* Prix */
+.fw-bold {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+

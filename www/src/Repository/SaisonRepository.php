@@ -16,28 +16,18 @@ class SaisonRepository extends ServiceEntityRepository
         parent::__construct($registry, Saison::class);
     }
 
-    //    /**
-    //     * @return Saison[] Returns an array of Saison objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findSeason(): ?Saison
+    {
+        $date = new \DateTime();
+        $currentDate = $date->format('Y-m-d');
 
-    //    public function findOneBySomeField($value): ?Saison
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.dateS <= :currentDate')
+            ->andWhere('s.dateE >= :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
 }
