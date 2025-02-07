@@ -1,0 +1,41 @@
+# version: '3.8'
+
+services:
+  apache_le_refuge_vert:
+    # nom du service
+    build: apache # dossier contenant le Dockerfile
+    container_name: apache_le_refuge_vert # nom du container
+    restart: always # redémarrage automatique
+    ports:
+      # ports exposés
+      - "80:80"
+    volumes:
+      # volumes montés
+      - ./www:/var/www/html
+      - ./apache/custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini
+    environment:
+      # variables d'environnement
+      - PHP_ERROR_REPORTING=E_ALL # afficher toutes les erreurs
+      - PHP_DISPLAY_ERRORS=On # afficher les erreurs
+
+  mariadb_le_refuge_vert:
+    # nom du service
+    image: mariadb:latest # image à utiliser
+    container_name: mariadb_le_refuge_vert # nom du container
+    restart: always # redémarrage automatique
+    ports:
+      # ports exposés
+      - "3306:3306"
+    environment:
+      # variables d'environnement
+      - MYSQL_ROOT_PASSWORD=superAdmin # mot de passe root
+      - MYSQL_DATABASE=leRefugeVert # nom de la base de données
+      - MYSQL_USER=admin # nom de l'utilisateur
+      - MYSQL_PASSWORD=admin # mot de passe de l'utilisateur
+    volumes:
+      # volumes montés
+      - ./mysql:/var/lib/mysql
+      - ./db:/root # envoi le répertoire db dans le container
+
+volumes:
+  mysql:
