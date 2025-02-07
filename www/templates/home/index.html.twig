@@ -3,7 +3,108 @@
 {% block title %}Acceuil{% endblock %}
 
 {% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Informations du Camping</h1>
 
+    {# Section Utilisateurs #}
+    <div class="mb-4">
+        <h2>Utilisateurs</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Rôle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.roles|join(', ') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
+    {# Section Saisons #}
+    <div class="mb-4">
+        <h2>Saisons</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom de la Saison</th>
+                    <th>Date de Début</th>
+                    <th>Date de Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for season in seasons %}
+                    <tr>
+                        <td>{{ season.label }}</td>
+                        <td>{{ season.dateS|date('d/m/Y') }}</td>
+                        <td>{{ season.dateE|date('d/m/Y') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
+    {# Section Logements #}
+    <div class="mb-4">
+        <h2>Logements</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Type de Logement</th>
+                    <th>Surface</th>
+                    <th>Capacité</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for logement in logements %}
+                    <tr>
+                        <td>{{ logement.label }}</td>
+                        <td>{{ logement.surface }} m²</td>
+                        <td>{{ logement.nbPersonne }} personnes</td>
+                        <td>{{ logement.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Section Équipements #}
+    <div class="mb-4">
+        <h2>Équipements</h2>
+        <ul class="list-group">
+            {% for equipment in equipments %}
+                <li class="list-group-item">{{ equipment.label }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {# Section Réservations #}
+    <div class="mb-4">
+        <h2>Réservations</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Logement</th>
+                    <th>Date de Début</th>
+                    <th>Date de Fin</th>
+                    <th>Nombre d'Adultes</th>
+                    <th>Nombre d'Enfants</th>
+                </tr>
+            </thead>
+            
+        </table>
+    </div>
+</div>
 {% endblock %}
