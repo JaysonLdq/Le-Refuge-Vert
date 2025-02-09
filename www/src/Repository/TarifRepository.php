@@ -1,43 +1,36 @@
-<?php
-
+<?php 
 namespace App\Repository;
 
+use App\Entity\Logement;
+use App\Entity\Saison;
 use App\Entity\Tarif;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Tarif>
- */
 class TarifRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tarif::class);
     }
+    
+    public function findTarif(Logement $logement, Saison $saison)
+    {
+        $tarif = $this->createQueryBuilder('t')
+            ->where('t.logement = :logement')
+            ->andWhere('t.saison = :saison')
+            ->setParameter('logement', $logement->getId())
+            ->setParameter('saison', $saison->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+    
+      
+        
+        return $tarif;
+    }
+    
+    
+    
 
-    //    /**
-    //     * @return Tarif[] Returns an array of Tarif objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Tarif
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

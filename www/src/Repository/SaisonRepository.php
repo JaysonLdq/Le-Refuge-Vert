@@ -18,16 +18,18 @@ class SaisonRepository extends ServiceEntityRepository
 
     public function findSeason(): ?Saison
     {
-        $date = new \DateTime();
-        $currentDate = $date->format('Y-m-d');
-
-        return $this->createQueryBuilder('s')
+        $currentDate = new \DateTime();
+    
+        $qb = $this->createQueryBuilder('s')
             ->andWhere('s.dateS <= :currentDate')
             ->andWhere('s.dateE >= :currentDate')
-            ->setParameter('currentDate', $currentDate)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->setParameter('currentDate', $currentDate);
+    
+    
+        return $qb->getQuery()->getOneOrNullResult();
     }
+    
+
 
 
 }

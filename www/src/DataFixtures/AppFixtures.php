@@ -34,9 +34,11 @@ class AppFixtures extends Fixture
         $this->loadEquipment($manager);
         $this->loadLogement($manager);
         $this->loadTarif($manager);
-
-
         $manager->flush();
+        
+
+
+        
     }
 
     /**
@@ -86,40 +88,28 @@ class AppFixtures extends Fixture
      * @return void
      */
 
-    public function loadSeasons(ObjectManager $manager): void
-    {
-        //on crée un tableau avec les infos des saisons
-        $array_season = [
-            [
-                'label' => 'Haute saison',
-                'date_s' => '2025-06-01',  // Date de début pour Haute saison
-                'date_e' => '2025-09-01',  // Date de fin pour Haute saison
-            ],
-            [
-                'label' => 'Basse saison',
-                'date_s' => '2025-09-01',
-                'date_e' => '2026-06-30',
-            ],
-            [
-                'label' => 'Hors saison', // C'est la saison de fermeture
-                'date_s' => '2025-12-01',
-                'date_e' => '2025-12-31',
-            ]
+     private array $saisons = [];
 
-        ];
-
-        //on va boucler sur le tableau pour créer les saisons
-        foreach($array_season as $key => $value)
-        {
-            //on instancie une saison
-            $season = new Saison(); 
-            $season->setLabel($value['label']);
-            $season->setDateS(new \DateTime($value['date_s']));
-            $season->setDateE(new \DateTime($value['date_e']));
-            //on persiste les données
-            $manager->persist($season);
-        }
-    }
+     public function loadSeasons(ObjectManager $manager): void
+     {
+         $array_season = [
+             ['label' => 'Haute saison', 'date_s' => '2025-06-01', 'date_e' => '2025-09-01'],
+             ['label' => 'Basse saison', 'date_s' => '2025-09-01', 'date_e' => '2026-06-30'],
+             ['label' => 'Hors saison', 'date_s' => '2025-12-01', 'date_e' => '2025-12-31']
+         ];
+     
+         foreach ($array_season as $key => $value) {
+             $season = new Saison();
+             $season->setLabel($value['label']);
+             $season->setDateS(new \DateTime($value['date_s']));
+             $season->setDateE(new \DateTime($value['date_e']));
+             $manager->persist($season);
+     
+             // Stocker l'objet Saison dans le tableau
+             $this->saisons[$key] = $season;
+         }
+     }
+     
 
     /**
      * méthode pour générer des réservations
@@ -230,58 +220,32 @@ class AppFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    public function loadLogement(ObjectManager $manager): void
-    {
-        // Tableau des logements
-        $array_logement = [
-            [
-                'label' => 'Mobil-home',
-                'surface' => 30,
-                'imagePath' => 'mobil-home.jpg',
-                'nb_personnes' => 4,
-                'emplacement' => 2,
-                'equipments' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'description' => 'Mobil-home de 30m² avec 2 chambres, 1 salle de bain, 1 WC, 1 cuisine équipée, 1 salon, 1 terrasse couverte.'
-            ],
-            [
-                'label' => 'terrain',
-                'surface' => 40,
-                'imagePath' => 'chalet.jpg',
-                'nb_personnes' => 6,
-                'emplacement' => 3,
-                'equipments' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'description' => 'terrain de 40m²'
-            ],
-            [
-                'label' => 'Tente',
-                'surface' => 20,
-                'imagePath' => 'tente.jpg',
-                'nb_personnes' => 2,
-                'emplacement' => 1,
-                'equipments' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                'description' => 'Tente de 20m² avec 1 chambre, 1 salle de bain, 1 WC, 1 cuisine équipée, 1 salon, 1 terrasse couverte.'
-            ]
-        ];
+    private array $logements = [];
 
-        //on va boucler sur le tableau pour créer les logements 
-        foreach($array_logement as $key => $value)
-        {
-            //on instancie un logement
-            $logement = new Logement(); 
-            $logement->setLabel($value['label']);
-            $logement->setSurface($value['surface']);
-            $logement->setImagePath($value['imagePath']);
-            $logement->setNbPersonne($value['nb_personnes']);
-            $logement->setEmplacement($value['emplacement']);
-            $logement->setDescription($value['description']);
-            //on persiste les données
-            $manager->persist($logement);
-        }
+public function loadLogement(ObjectManager $manager): void
+{
+    $array_logement = [
+        ['label' => 'Mobil-home', 'surface' => 30, 'imagePath' => 'mobil-home.jpg', 'nb_personnes' => 4, 'emplacement' => 2, 'description' => 'Mobil-home de 30m²'],
+        ['label' => 'terrain', 'surface' => 40, 'imagePath' => 'chalet.jpg', 'nb_personnes' => 6, 'emplacement' => 3, 'description' => 'terrain de 40m²'],
+        ['label' => 'Tente', 'surface' => 20, 'imagePath' => 'tente.jpg', 'nb_personnes' => 2, 'emplacement' => 1, 'description' => 'Tente de 20m²']
+    ];
 
+    foreach ($array_logement as $key => $value) {
+        $logement = new Logement(); 
+        $logement->setLabel($value['label']);
+        $logement->setSurface($value['surface']);
+        $logement->setImagePath($value['imagePath']);
+        $logement->setNbPersonne($value['nb_personnes']);
+        $logement->setEmplacement($value['emplacement']);
+        $logement->setDescription($value['description']);
+        $manager->persist($logement);
 
+        // Stocker l'objet Logement dans le tableau pour utilisation future
+        $this->logements[$key] = $logement;
     }
+}
 
-    /**
+
 /**
  * méthode pour générer des tarifs
  * @param ObjectManager $manager
@@ -289,47 +253,38 @@ class AppFixtures extends Fixture
  */
 public function loadTarif(ObjectManager $manager): void
 {
-    // Tableau des tarifs avec des IDs existants
     $array_tarif = [
-        [
-            'saison_id' => 1, 
-            'price' => 110,
-            'logement_id' => 1  
-        ],
-        [
-            'saison_id' => 2,
-            'price' => 50,
-            'logement_id' => 2
-        ],
-        [
-            'saison_id' => 3,
-            'price' => 40,
-            'logement_id' => 3
-        ]
+        ['saison_index' => 0, 'price' => 110, 'logement_index' => 0],
+        ['saison_index' => 1, 'price' => 50, 'logement_index' => 1],
+        ['saison_index' => 2, 'price' => 40, 'logement_index' => 2]
     ];
 
-    // On boucle sur le tableau pour créer les tarifs
-    foreach($array_tarif as $value)
-    {
-        // On instancie un tarif
-        $tarif = new Tarif(); 
+    foreach ($array_tarif as $value) {
+        $tarif = new Tarif();
         $tarif->setPrice($value['price']);
-        
-        // Récupérer l'objet Saison avec l'ID
-        $saison = $manager->getRepository(Saison::class)->find($value['saison_id']);
+
+        // Récupérer la Saison via le tableau en mémoire
+        $saison = $this->saisons[$value['saison_index']] ?? null;
+        if (!$saison) {
+            throw new \Exception("❌ Saison index " . $value['saison_index'] . " introuvable !");
+        }
         $tarif->setSaison($saison);
 
-        // Récupérer l'objet Logement avec l'ID
-        $logement = $manager->getRepository(Logement::class)->find($value['logement_id']);
-        $tarif->setLogement($logement); // Associer le logement au tarif
+        // Récupérer le Logement via le tableau en mémoire
+        $logement = $this->logements[$value['logement_index']] ?? null;
+        if (!$logement) {
+            throw new \Exception("❌ Logement index " . $value['logement_index'] . " introuvable !");
+        }
+        $tarif->setLogement($logement);
 
-        // Persister le tarif dans la base de données
+        // Debug : Voir si Logement est bien trouvé
+        dump("🔎 Logement Index " . $value['logement_index'], $logement);
+
         $manager->persist($tarif);
     }
-
-    // Enregistrer tous les changements dans la base de données
-    $manager->flush();
 }
+
+
 
 
 }

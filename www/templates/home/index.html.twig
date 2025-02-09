@@ -5,32 +5,25 @@
 {% block body %}
     <div class="container mt-4">
         
-
-        {% if saison == 'hors_saison' %}
+        {% if saison and saison.label == 'hors_saison' %}
             <div class="alert alert-warning text-center">
                 <strong>Aucune réservation pour la période de hors saison</strong>
             </div>
         {% else %}
             <div class="row">
-                {% for logement in logements %}
+                {% for logement in logementsAvecPrix %}
                     <div class="col-md-4 mb-4">
                         <div class="card vignette">
-                            <img src="{{ asset('img/' ~ logement.imagePath) }}" class="card-img-top" alt="{{ logement.label }}">
+                            <img src="{{ asset('img/' ~ logement.logement.imagePath) }}" class="card-img-top" alt="{{ logement.logement.label }}">
                             <div class="card-body">
-                                <h5 class="card-title">{{ logement.label }}</h5>
-                                <p class="card-text">{{ logement.description }}</p>
-
-                                {# Section tarif désactivée : #}
-                                {# <p class="fw-bold">Prix: 
-                                    {% if periode == 'hors_saison' %}
-                                        <span class="text-danger">Non disponible</span>
-                                    {% else %}
-                                        {{ prix_final | number_format(2, ',', ' ') }} €
-                                    {% endif %}
-                                </p> #}
+                                <h5 class="card-title">{{ logement.logement.label }}</h5>
+                                <p class="card-text">{{ logement.logement.description }}</p>
+                                <p>Prix : {{ logement.price }} €</p>  {# Affichage du prix #}
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <p class="text-center">Aucun logement disponible.</p>
                 {% endfor %}
             </div>
         {% endif %}

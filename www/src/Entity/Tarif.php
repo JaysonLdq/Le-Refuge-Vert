@@ -13,8 +13,9 @@ class Tarif
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
     private ?int $price = null;
+    
 
     // Suppression de la relation OneToMany avec Logement car elle n'est pas nécessaire
     #[ORM\ManyToOne(targetEntity: Logement::class, inversedBy: 'tarifs')]
