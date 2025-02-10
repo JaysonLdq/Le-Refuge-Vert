@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu">
                     {# <li><a href="{{ path('profil') }}">Mon profil</a></li> #}
                     {% if 'ROLE_ADMIN' in app.user.roles %}
-                        <li><a href="{{ path('admin_dashboard') }}">Dashboard</a></li>
+                        <li><a href="/admin/dashboard">Dashboard</a></li>
                     {% endif %}
                     <li><a href="{{ path('app_logout') }} " method="POST">Déconnexion</a></li>
                 </ul>
