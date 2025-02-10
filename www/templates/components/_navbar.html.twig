@@ -13,17 +13,17 @@
         {% if app.user %}
             <!-- Si l'utilisateur est connecté, afficher son email avec un menu déroulant -->
             <div class="user-dropdown">
-                <span class="user-email">{{ app.user.username }}</span>
+                <span class="user-email">{{ app.user.firstname }}</span>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ path('profil') }}">Mon profil</a></li>
+                    {# <li><a href="{{ path('profil') }}">Mon profil</a></li> #}
                     {% if 'ROLE_ADMIN' in app.user.roles %}
                         <li><a href="{{ path('admin_dashboard') }}">Dashboard</a></li>
                     {% endif %}
-                    <li><a href="#">Déconnexion</a></li>
+                    <li><a href="{{ path('app_logout') }} " method="POST">Déconnexion</a></li>
                 </ul>
             </div>
         {% else %}
-            <a href="#" class="login-link">Connexion</a>
+            <a href="{{ path('app_login') }}" class="login-link">Connexion</a>
         {% endif %}
     </div>
 </header>

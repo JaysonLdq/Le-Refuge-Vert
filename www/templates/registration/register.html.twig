@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {{ form_start(registrationForm, { 'attr': { 'class':'game-form' } }) }}
+    <h1>Créer un compte</h1>
+    {{ form_errors(registrationForm) }}
+
+    <div class="form-group">
+        {{ form_label(registrationForm.firstname) }}
+        {{ form_widget(registrationForm.firstname) }}
+        {{ form_errors(registrationForm.firstname) }}
+    </div>
+
+     <div class="form-group">
+        {{ form_label(registrationForm.lastname) }}
+        {{ form_widget(registrationForm.lastname) }}
+        {{ form_errors(registrationForm.lastname) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(registrationForm.email) }}
+        {{ form_widget(registrationForm.email) }}
+        {{ form_errors(registrationForm.email) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(registrationForm.plainPassword) }}
+        {{ form_widget(registrationForm.plainPassword) }}
+        {{ form_errors(registrationForm.plainPassword) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(registrationForm.agreeTerms) }}
+        {{ form_widget(registrationForm.agreeTerms) }}
+        {{ form_errors(registrationForm.agreeTerms) }}
+    </div>
+
+    <button class="btn-submit" type="submit">
+        <i class="fas fa-save"></i>
+        {{ button_label|default('Créer un compte') }}
+    </button>
+
+    <div class="form-group">
+        <a class="link-auth" href="{{ path('app_login') }}">Déjà un compte ? Connectez-vous</a>
+    </div>
+
+    {{ form_end(registrationForm) }}
+{% endblock %}

@@ -201,49 +201,57 @@ h1 {
 }
 
 /* User Dropdown */
+/* Assurez-vous que la navbar-user est en position relative */
 .navbar-user {
     position: relative;
+    display: inline-block;
 }
 
-.user-dropdown {
-    position: relative;
-    cursor: pointer;
-}
-
-.user-dropdown .user-email {
-    color: white;
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
+/* Ajustement du dropdown pour qu'il soit bien collé sous l'utilisateur */
 .dropdown-menu {
     display: none;
     position: absolute;
-    background-color: white;
-    color: black;
+    top: calc(100% + 5px); /* Juste en dessous avec un petit espace */
     right: 0;
-    top: 30px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    overflow: hidden;
+    background-color: #416642;
+    border-radius: 8px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0;
+    min-width: 180px; /* Taille minimum du menu */
+    z-index: 999;
 }
 
+/* Affichage au survol */
 .user-dropdown:hover .dropdown-menu {
     display: block;
 }
 
+/* Ajustement des éléments */
 .dropdown-menu li {
-    padding: 10px;
+    padding: 8px 15px;
+    color: whitesmoke;
+    text-align: left;
+    white-space: nowrap; /* Évite les retours à la ligne inutiles */
 }
 
+.dropdown-menu li:hover {
+    background-color: #416642;
+}
+
+/* Style des liens */
 .dropdown-menu a {
+    color: whitesmoke;
     text-decoration: none;
-    color: black;
+    display: block;
+    width: 100%;
 }
 
 .dropdown-menu a:hover {
-    background-color: #4ea44e;
-    color: white;
+    background-color: #355336;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 /* Style pour le bouton de connexion */
@@ -257,5 +265,115 @@ h1 {
 
 .login-link:hover {
     background-color: #4b8c4b;
+}
+
+/* ======= STYLISATION DE LA PAGE DE CONNEXION ======= */
+.game-form {
+    max-width: 400px;
+    margin: 80px auto;
+    background: #b0e09f;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* TITRE */
+.game-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* ALERTES & MESSAGES */
+.alert {
+    background: #ffdede;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* UTILISATEUR CONNECTÉ */
+.user-logged-in {
+    background: #c0d1bd;
+    color: #2c3e50;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* FORM GROUP */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* CENTRER ET ÉQUILIBRER LES CHAMPS */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Assure que tout reste centré */
+    color: #2c3e50
+}
+
+/* CHAMPS FORMULAIRE AVEC MARGES ÉGALES */
+.form-control {
+    width: 90%; /* Ajuste la largeur pour équilibrer la marge */
+    max-width: 320px;
+    text-align: left; /* Garde le texte aligné à gauche */
+    padding: 10px;
+    border: 1px solid #9ac48a;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #9ac48a;
+}
+
+
+.form-control:focus {
+    border: 1px solid #4CAF50;
+}
+
+/* BOUTON DE SOUMISSION */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-submit i {
+    font-size: 18px;
+}
+
+.btn-submit:hover {
+    background: #388E3C;
+}
+
+/* LIEN D'AUTHENTIFICATION */
+.link-auth {
+    display: block;
+    margin-top: 10px;
+    color: #2c3e50;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.link-auth:hover {
+    color: #4CAF50;
 }
 
