@@ -157,3 +157,105 @@ h1 {
     background: #45a049;
 }
 
+.logement-item-link {
+    text-decoration: none;
+    color: #333;
+}
+
+.logement-item-link:hover {
+    text-decoration: none;
+    color: #555454;
+}
+
+/* Styles généraux de la navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #416642;
+    padding: 15px 30px;
+    color: white;
+}
+
+.navbar-logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-links ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+/* User Dropdown */
+.navbar-user {
+    position: relative;
+}
+
+.user-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.user-dropdown .user-email {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    right: 0;
+    top: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.user-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+}
+
+.dropdown-menu a {
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-menu a:hover {
+    background-color: #4ea44e;
+    color: white;
+}
+
+/* Style pour le bouton de connexion */
+.login-link {
+    background-color: #4ea44e;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    background-color: #4b8c4b;
+}
+

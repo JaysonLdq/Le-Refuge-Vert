@@ -1,0 +1,29 @@
+<header class="navbar">
+    <div class="navbar-logo">
+        <a href="{{ path('home') }}">🏕️ Le Refuge Vert</a>
+    </div>
+    <nav class="navbar-links">
+        <ul>
+            <li><a href="{{ path('home') }}">Accueil</a></li>
+            <li><a href="#">Nos Logements</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="navbar-user">
+        {% if app.user %}
+            <!-- Si l'utilisateur est connecté, afficher son email avec un menu déroulant -->
+            <div class="user-dropdown">
+                <span class="user-email">{{ app.user.username }}</span>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ path('profil') }}">Mon profil</a></li>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <li><a href="{{ path('admin_dashboard') }}">Dashboard</a></li>
+                    {% endif %}
+                    <li><a href="#">Déconnexion</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <a href="#" class="login-link">Connexion</a>
+        {% endif %}
+    </div>
+</header>

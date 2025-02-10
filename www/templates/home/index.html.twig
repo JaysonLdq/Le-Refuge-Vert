@@ -12,6 +12,7 @@
         {% else %}
             <div class="row">
                 {% for logement in logementsAvecPrix %}
+                <a href="{{ path('logement_detail', { id: logement.logement.id }) }}" class="logement-item-link">
                     <div class="col-md-4 mb-4">
                         <div class="card vignette">
                             <img src="{{ asset('img/' ~ logement.logement.imagePath) }}" class="card-img-top" alt="{{ logement.logement.label }}">
@@ -22,6 +23,7 @@
                             </div>
                         </div>
                     </div>
+                </a>
                 {% else %}
                     <p class="text-center">Aucun logement disponible.</p>
                 {% endfor %}
