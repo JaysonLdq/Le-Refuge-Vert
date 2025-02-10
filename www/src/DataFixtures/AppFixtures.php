@@ -278,11 +278,13 @@ public function loadTarif(ObjectManager $manager): void
         $tarif->setLogement($logement);
 
         // Debug : Voir si Logement est bien trouvé
-        dump("🔎 Logement Index " . $value['logement_index'], $logement);
+        dump(" Logement Index " . $value['logement_index'], $logement);
 
         $manager->persist($tarif);
     }
 }
+
+
 
 
 

@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ logement.label | default('Détails du logement') }}
+{% endblock %}
+
+{% block body %}
+    <div class="details-container">
+        <div class="details-card">
+            <img src="{{ asset('img/' ~ logement.imagePath) }}" alt="{{ logement.label }}">
+            <h1>{{ logement.label }}</h1>
+            
+            <p class="description">{{ logement.description }}</p>
+
+            <div class="info-section">
+                <h3>Informations du logement</h3>
+                <ul>
+                    <li>Surface : {{ logement.surface }} m²</li>
+                    <li>Capacité : {{ logement.nbPersonne }} personnes</li>
+                    <li>Emplacement : {{ logement.emplacement }}</li>
+                    <li>Prix : {{ price is not null ? price ~ '€' : 'Tarif indisponible' }}</li>
+                </ul>
+            </div>
+
+            <button class="back-button" onclick="window.history.back()">Retour</button>
+        </div>
+    </div>
+{% endblock %}

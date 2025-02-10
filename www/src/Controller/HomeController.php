@@ -89,4 +89,74 @@ class HomeController extends AbstractController
             'logementsAvecPrix' => $logementsAvecPrix
         ]);
     }
+    
+    #[Route('/logement/{id}', name: 'logement_detail')]
+    public function logementById(
+        LogementRepository $logementRepository,
+        TarifRepository $tarifRepository,
+        SaisonRepository $saisonRepository,
+        EntityManagerInterface $em,
+        int $id
+    ): Response {
+        // Récupérer le logement par son ID
+        $logement = $logementRepository->find($id);
+    
+        // Vérifier si le logement existe
+        if (!$logement) {
+            throw $this->createNotFoundException('Logement non trouvé');
+        }
+    
+        // Récupérer la saison actuelle
+        $saisonActuelle = $saisonRepository->findSeason();
+    
+        // Si aucune saison actuelle n'est trouvée, rechercher une saison par défaut
+        if (!$saisonActuelle) {
+            dump("Aucune saison actuelle trouvée, recherche d'une saison par défaut...");
+    
+            $saisonActuelle = $saisonRepository->createQueryBuilder('s')
+                ->where('s.label IN (:defaultSeasons)')
+                ->setParameter('defaultSeasons', ['Haute saison', 'Basse saison', 'Hors saison'])
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+    
+            // Si aucune saison par défaut n'existe, créer une nouvelle saison "Haute saison"
+            if (!$saisonActuelle) {
+                dump("Aucune saison par défaut trouvée, création de 'Haute saison'...");
+    
+                $saisonActuelle = new Saison();
+                $saisonActuelle->setLabel("Haute saison");
+                $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
+                $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
+    
+                $em->persist($saisonActuelle);
+                $em->flush();
+    
+                dump("Nouvelle saison créée :", $saisonActuelle);
+            }
+        }
+    
+        // Récupérer le tarif du logement en fonction de la saison
+        $tarif = null;
+        if ($saisonActuelle) {
+            $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
+        }
+    
+        // Déterminer le prix affiché
+        $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+    
+        // Passer les données à la vue
+        return $this->render('home/details.html.twig', [
+            'logement' => $logement,
+            'saison' => $saisonActuelle,
+            'price' => $price
+        ]);
+    }
+    
 }
+    
+
+
+
+    
+
