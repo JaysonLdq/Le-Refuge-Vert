@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+	<div class="container-user">
+		<h1>{{ user.firstname }}</h1>
+
+		<div class="card-user">
+			<div class="card-body">
+				<h5 class="card-title">{{ user.firstname }}</h5>
+				<p class="card-text">{{ user.lastname }}</p>
+				<p class="card-text">{{ user.roles|join(', ') }}</p>
+				<p class="card-text">{{ user.email }}</p>
+			</div>
+		</div>
+
+		<div class="action-buttons-user">
+			<div>
+				{% include "user/_delete_form.html.twig" with {'button_class': 'btn btn-delete'} %}
+			</div>
+			<div>
+				<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-edit">Éditer</a>
+			</div>
+			<div>
+				<a href="{{ path('app_user_index') }}" class="btn btn-back">
+					<i class="fas fa-arrow-left"></i> Retour à la liste
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

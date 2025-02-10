@@ -7,9 +7,9 @@
         <h1 class="dashboard-title">Dashboard</h1>
         <h2 class="dashboard-greeting">Hello {{ app.user.firstname }}!</h2>
         <div class="action-buttons">
-            <a href="*" class="btn btn-view-locations">Voir les locations</a>
+            <a href="{{ path('app_logement') }}" class="btn btn-view-locations">Voir les locations</a>
             <a href="*" class="btn btn-view-reservations">Voir les reservations</a>
-            <a href="*"  class="btn btn-manage-users">Gérer les utilisateurs</a>
+            <a href="{{ path('app_user_index') }}"  class="btn btn-manage-users">Gérer les utilisateurs</a>
         </div>
     </div>
 {% endblock %}

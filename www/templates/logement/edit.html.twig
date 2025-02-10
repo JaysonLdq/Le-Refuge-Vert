@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer {{ logement.label }}{% endblock %}
+
+{% block body %}
+    <h1>Éditer {{ logement.label }}</h1>
+
+    <div class="form-container">
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+        {{ form_row(form.label) }}
+        {{ form_row(form.surface) }}
+        {{ form_row(form.nbPersonne) }}
+        {{ form_row(form.emplacement) }}
+        {{ form_row(form.description) }}
+
+        <div class="image-preview">
+            {% if logement.imagePath %}
+                <img src="{{ asset('img/' ~ logement.imagePath) }}" alt="Image actuelle" style="max-width: 200px;">
+            {% else %}
+                <p>Aucune image disponible</p>
+            {% endif %}
+        </div>
+
+        {{ form_row(form.image) }}
+
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <a href="{{ path('app_logement') }}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

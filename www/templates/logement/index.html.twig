@@ -1,20 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LogementController!{% endblock %}
+{% block title %}Liste des Logements{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<div class="logement-list-container">
+		<h1>Liste des Logements</h1>
+		<a href="{{ path('app_logement_new') }}" class="add-logement-btn">Ajouter un logement</a>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/src/Controller/LogementController.php</code></li>
-        <li>Your template at <code>/var/www/html/templates/logement/index.html.twig</code></li>
-    </ul>
-</div>
+		<table class="logement-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Image</th>
+					<th>Label</th>
+					<th>Description</th>
+					<th>Surface (m²)</th>
+					<th>Capacité</th>
+					<th>Emplacement</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for logement in logements %}
+					<tr>
+						<td>{{ logement.id }}</td>
+						<td>
+							{% if logement.imagePath %}
+								<img src="{{ asset('img/' ~ logement.imagePath) }}" alt="{{ logement.label }}" class="logement-image">
+							{% else %}
+								Aucune image
+							{% endif %}
+						</td>
+						<td>{{ logement.label }}</td>
+						<td>{{ logement.description|length > 50 ? logement.description|slice(0, 50) ~ '...' : logement.description }}</td>
+						<td>{{ logement.surface }}</td>
+						<td>{{ logement.nbPersonne }}</td>
+						<td>{{ logement.emplacement }}</td>
+						<td>
+							<div class="logement-actions">
+								<a href="{{ path('logement_detail', {'id': logement.id}) }}" class="view-link">Voir</a>
+								<a href="{{ path('app_logement_edit', {'id': logement.id}) }}" class="edit-link">Modifier</a>
+								<form action="{{ path('app_logement_delete', {'id': logement.id}) }}" method="post" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ logement.id) }}">
+									<button type="submit" class="delete-link" onclick="return confirm('Voulez-vous vraiment supprimer ce logement ?');">
+										Supprimer
+									</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8">Aucun logement trouvé</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<a href="/admin/dashboard" class="add-logement-btn">Retour au dashboard</a>
+	</div>
 {% endblock %}

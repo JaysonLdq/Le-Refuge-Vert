@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Ajouter un Logement {% endblock %}
+
+{% block body %}
+<div class="logement-form-container">
+    <h1>Ajouter un nouveau logement</h1>
+    
+    {{ form_start(form, {'attr': {'class': 'logement-form'}}) }}
+    
+    <div class="form-group">
+        {{ form_label(form.label) }}
+        {{ form_widget(form.label, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.surface) }}
+        {{ form_widget(form.surface, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+   <div class="image-preview">
+    {% if logement.imagePath %}
+        <img src="{{ asset('img/logements/' ~ logement.imagePath) }}" alt="Image actuelle" style="max-width: 200px;">
+    {% endif %}
+    </div>
+
+{{ form_row(form.image) }} {# ✅ Ce champ existe bien dans le formulaire #}
+
+
+    <div class="form-group">
+        {{ form_label(form.nbPersonne) }}
+        {{ form_widget(form.nbPersonne, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.emplacement) }}
+        {{ form_widget(form.emplacement, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <button type="submit" class="submit-button">Ajouter</button>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+<h2 class="table-title">{{ title }}</h2>
+<table class="user-table">
+     <thead>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>firstname</th>
+            <th>lastname</th>
+			<th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for admin in users %}
+            <tr>
+                <td>{{ admin.id }}</td>
+                <td>{{ admin.email }}</td>
+                <td>{{ admin.firstname }}</td>
+                <td>{{ admin.lastname }}</td>
+				<td>{{ admin.roles|join(', ') }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ path('app_user_show', {'id': admin.id}) }}" class="btn-view">Voir</a>
+                        <a href="{{ path('app_user_edit', {'id': admin.id}) }}" class="btn-edit">Éditer</a>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="no-users">Pas d'utilisateur trouvé</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+

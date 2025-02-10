@@ -454,4 +454,508 @@ h1 {
     }
 }
 
+/* ======= CONTAINER PRINCIPAL ======= */
+.logement-list-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* TITRE PRINCIPAL */
+.logement-list-container h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* BOUTON AJOUTER UN LOGEMENT */
+.add-logement-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 5px;
+    background: #4CAF50;
+    transition: background 0.3s ease-in-out;
+    margin-bottom: 20px;
+}
+
+.add-logement-btn:hover {
+    background: #388E3C;
+}
+
+/* ======= TABLEAU ======= */
+.logement-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.logement-table th, .logement-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.logement-table th {
+    background: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.logement-table td {
+    color: #333;
+}
+
+/* IMAGE LOGEMENT */
+.logement-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* ======= ACTIONS ======= */
+.logement-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* LIENS */
+.view-link, .edit-link, .delete-link {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+/* COULEURS DES ACTIONS */
+.view-link {
+    background: #3498db;
+    color: white;
+}
+
+.edit-link {
+    background: #f1c40f;
+    color: white;
+}
+
+.delete-link {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* HOVER EFFECT */
+.view-link:hover {
+    background: #2980b9;
+}
+
+.edit-link:hover {
+    background: #d4ac0d;
+}
+
+.delete-link:hover {
+    background: #c0392b;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .logement-table th, .logement-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .logement-actions {
+        flex-direction: column;
+    }
+
+    .add-logement-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+.logement-form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logement-form-container h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ffffff;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.submit-button:hover {
+    background: #388E3C;
+}
+
+/* ========================= */
+/* STYLISATION DU FORMULAIRE */
+/* ========================= */
+
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* TITRE */
+.form-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* CHAMPS DE FORMULAIRE */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* INPUTS */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease-in-out;
+}
+
+.form-control:focus {
+    border: 1px solid #4CAF50;
+}
+
+/* IMAGE PREVIEW */
+.image-preview {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: white;
+}
+
+/* BOUTONS */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #388E3C;
+}
+
+.btn-secondary {
+    background: #777;
+    color: white;
+    margin-top: 15px;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+    .form-container {
+        max-width: 90%;
+    }
+}
+
+/* ==========================
+   TABLEAU DES UTILISATEURS
+   ========================== */
+   
+/* Titre du tableau */
+.table-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Conteneur du tableau */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* En-tête du tableau */
+.user-table thead {
+    background-color: #416642;
+    color: white;
+}
+
+.user-table th {
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+
+/* Lignes du tableau */
+.user-table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Cellules du tableau */
+.user-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Alternance des couleurs des lignes pour lisibilité */
+.user-table tbody tr:nth-child(even) {
+    background: #e8f5e9;
+}
+
+/* Lignes au survol */
+.user-table tbody tr:hover {
+    background: #c8e6c9;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Actions */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Boutons d'action */
+.btn-view,
+.btn-edit {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Bouton Voir */
+.btn-view {
+    background: #4CAF50;
+    color: white;
+    border: 1px solid #388E3C;
+}
+
+.btn-view:hover {
+    background: #388E3C;
+}
+
+/* Bouton Éditer */
+.btn-edit {
+    background: #fbc02d;
+    color: white;
+    border: 1px solid #f9a825;
+}
+
+.btn-edit:hover {
+    background: #f9a825;
+}
+
+/* Pas d'utilisateur trouvé */
+.no-users {
+    text-align: center;
+    font-weight: bold;
+    color: #757575;
+    padding: 15px;
+    font-size: 16px;
+}
+
+.card-user {
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* ======= STYLE POUR LES RÉSERVATIONS ======= */
+
+.rental-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.rental-container h1 {
+    font-size: 28px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.no-rental {
+    font-size: 18px;
+    color: #888;
+    margin-top: 20px;
+}
+
+/* TABLEAU DES RÉSERVATIONS */
+.rental-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.rental-table th, 
+.rental-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.rental-table th {
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+}
+
+.rental-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* STATUTS */
+.status-confirmed {
+    color: #2E7D32;
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #E65100;
+    font-weight: bold;
+}
+
+/* BOUTONS */
+.btn-view, .btn-edit, .btn-delete {
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn-view {
+    background: #3498db;
+    color: white;
+}
+
+.btn-edit {
+    background: #f1c40f;
+    color: white;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-view:hover {
+    background: #2980b9;
+}
+
+.btn-edit:hover {
+    background: #d4ac0d;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+/* FORMULAIRE DE SUPPRESSION */
+.delete-form {
+    display: inline;
+}
+
+
+
 
