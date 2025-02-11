@@ -33,6 +33,19 @@
                 </ul>
             </div>
 
+            <!-- Formulaire de réservation -->
+            <div class="reservation-section">
+                <h3>Réservez maintenant</h3>
+                {{ form_start(reservationForm) }}
+                {{ form_row(reservationForm.dateStart) }}
+                {{ form_row(reservationForm.dateEnd) }}
+                {{ form_row(reservationForm.nbAdulte) }}
+                {{ form_row(reservationForm.nbChild) }}
+                <!-- Ajout du bouton de validation -->
+                <button type="submit">Réserver</button>
+                {{ form_end(reservationForm) }}
+            </div>
+
             <button class="back-button" onclick="window.history.back()">Retour</button>
         </div>
     </div>

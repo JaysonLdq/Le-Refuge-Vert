@@ -1004,6 +1004,78 @@ option:checked {
 }
 
 
+/* Style global du formulaire de réservation */
+.reservation-section {
+    background-color: #f9f9f9; /* Fond clair */
+    border-radius: 8px; /* Bords arrondis */
+    padding: 20px; /* Espacement interne */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère autour du formulaire */
+    margin-top: 20px; /* Espacement avec le contenu précédent */
+}
+
+.reservation-section h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px; /* Espacement en bas du titre */
+    color: #333; /* Couleur du texte */
+}
+
+/* Style des champs du formulaire */
+.reservation-section input,
+.reservation-section select,
+.reservation-section textarea {
+    width: 100%; /* Prendre toute la largeur */
+    padding: 10px; /* Espacement interne */
+    margin-bottom: 15px; /* Espacement entre les champs */
+    border: 1px solid #ccc; /* Bordure légère */
+    border-radius: 4px; /* Bords arrondis */
+    font-size: 1rem; /* Taille de la police */
+    box-sizing: border-box; /* Prend en compte les bordures dans les dimensions */
+}
+
+.reservation-section input:focus,
+.reservation-section select:focus,
+.reservation-section textarea:focus {
+    border-color: #007bff; /* Couleur de bordure bleue quand le champ est sélectionné */
+    outline: none; /* Supprime l'encadrement par défaut */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une légère ombre bleue */
+}
+
+/* Style du bouton de soumission */
+.reservation-section button[type="submit"] {
+    background-color: #007bff; /* Fond bleu */
+    color: white; /* Texte blanc */
+    border: none; /* Pas de bordure */
+    padding: 10px 20px; /* Espacement autour du texte */
+    border-radius: 5px; /* Bords arrondis */
+    font-size: 1rem; /* Taille de la police */
+    cursor: pointer; /* Pointeur pour indiquer que c'est cliquable */
+    transition: background-color 0.3s ease; /* Animation lors du survol */
+    width: 100%; /* Largeur du bouton sur tout le formulaire */
+}
+
+/* Changement de couleur au survol du bouton */
+.reservation-section button[type="submit"]:hover {
+    background-color: #0056b3; /* Couleur plus foncée au survol */
+}
+
+/* Style du bouton de retour */
+.back-button {
+    display: inline-block;
+    background-color: #6c757d; /* Couleur gris */
+    color: white; /* Texte blanc */
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px; /* Espacement au-dessus du bouton */
+    text-decoration: none; /* Supprime la décoration de lien */
+    font-size: 1rem;
+    text-align: center; /* Centrer le texte */
+}
+
+.back-button:hover {
+    background-color: #5a6268; /* Couleur plus foncée au survol */
+}
+
 
 
 
