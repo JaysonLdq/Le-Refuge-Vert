@@ -6,6 +6,8 @@
 <div class="rental-container">
     <h1>Liste des Réservations</h1>
 
+    <a href="{{ path('app_rental_new') }}" class="add-logement-btn">Ajouter une réservation</a>
+
     {% if rentals is empty %}
         <p class="no-rental">Aucune réservation trouvée.</p>
     {% else %}
@@ -44,4 +46,7 @@
         </table>
     {% endif %}
 </div>
+
+    
+
 {% endblock %}

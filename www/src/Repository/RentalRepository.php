@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Logement;
 use App\Entity\Rental;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,10 +42,26 @@ class RentalRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findAllRental(): array
+    public function findLogementByRental(int $rentalId): ?Logement
+    {
+        return $this->getEntityManager()
+            ->createQuery('
+                SELECT l FROM App\Entity\Logement l
+                JOIN App\Entity\Rental r WITH r.logement = l
+                WHERE r.id = :id
+            ')
+            ->setParameter('id', $rentalId)
+            ->getOneOrNullResult();
+    }
+
+    public function findByPrice($price)
     {
         return $this->createQueryBuilder('r')
+            ->where('r.price = :price')
+            ->setParameter('price', $price) // 🔥 Ajout de `setParameter`
             ->getQuery()
-            ->getResult();
-    }   
+            ->getOneOrNullResult();
+    }
+    
+
 }

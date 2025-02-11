@@ -193,27 +193,7 @@ public function new(Request $request, LogementRepository $logementRepository, En
         ]);
     }
 
-    private function initializeDefaultSeason(SaisonRepository $saisonRepository, EntityManagerInterface $em): Saison
-    {
-        $saisonActuelle = $saisonRepository->createQueryBuilder('s')
-            ->where('s.label IN (:defaultSeasons)')
-            ->setParameter('defaultSeasons', ['Haute saison', 'Basse saison', 'Hors saison'])
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (!$saisonActuelle) {
-            $saisonActuelle = new Saison();
-            $saisonActuelle->setLabel("Haute saison");
-            $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
-            $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
-
-            $em->persist($saisonActuelle);
-            $em->flush();
-        }
-
-        return $saisonActuelle;
-    }
+   
 
     
 }

@@ -3,7 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Rental;
+use App\Entity\Saison;
+use App\Form\RentalType;
+use App\Repository\LogementRepository;
 use App\Repository\RentalRepository;
+use App\Repository\SaisonRepository;
+use App\Repository\TarifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,77 +29,101 @@ class RentalController extends AbstractController
     }
 
     // 📌 Afficher une réservation spécifique
-    #[Route('/admin/rental/{id}', name: 'app_rental_show', methods: ['GET'])]
-    public function show(RentalRepository $rentalRepository, int $id): Response
+    #[Route('/admin/rental/{id<\d+>}', name: 'app_rental_show', methods: ['GET'])]
+    public function show(Rental $rental, SaisonRepository $saisonRepository, TarifRepository $tarifRepository, EntityManagerInterface $em, LogementRepository $logementRepository): Response
     {
-        $rental = $rentalRepository->find($id);
-
-        if (!$rental) {
-            return $this->render('rental/error.html.twig', [
-                'message' => 'Réservation non trouvée',
-            ]);
+        // Récupérer le logement associé à la réservation
+        $logement = $rental->getLogement();
+        if (!$logement) {
+            throw $this->createNotFoundException('Logement non trouvé');
         }
-
+    
+        // Récupérer la saison actuelle
+        $saisonActuelle = $saisonRepository->findSeason();
+    
+        // Si aucune saison trouvée, chercher une saison par défaut
+        if (!$saisonActuelle) {
+            $saisonActuelle = $saisonRepository->createQueryBuilder('s')
+                ->where('s.label IN (:defaultSeasons)')
+                ->setParameter('defaultSeasons', ['Haute saison', 'Basse saison', 'Hors saison'])
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+    
+            // Si toujours rien, créer une saison "Haute saison"
+            if (!$saisonActuelle) {
+                $saisonActuelle = new Saison();
+                $saisonActuelle->setLabel("Haute saison");
+                $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
+                $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
+    
+                $em->persist($saisonActuelle);
+                $em->flush();
+            }
+        }
+    
+        // Récupérer le tarif du logement en fonction de la saison
+        $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
+        $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+    
         return $this->render('rental/show.html.twig', [
             'rental' => $rental,
+            'logement' => $logement,
+            'price' => $price,
         ]);
     }
+    
 
     // 📌 Formulaire pour créer une nouvelle réservation
     #[Route('/admin/rental/new', name: 'app_rental_new', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
+public function add(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $rental = new Rental();
+    $form = $this->createForm(RentalType::class, $rental);
+    $form->handleRequest($request);
 
-            $rental = new Rental();
-            $rental->setUsers($data['users_id']);
-            $rental->setLogement($data['logement_id']);
-            $rental->setDateStart(new \DateTime($data['date_start']));
-            $rental->setDateEnd(new \DateTime($data['date_end']));
-            $rental->setNbAdulte($data['nb_adulte']);
-            $rental->setNbChild($data['nb_child']);
-
-            $entityManager->persist($rental);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_rental_list');
-        }
-
-        return $this->render('rental/new.html.twig');
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($rental);
+        $entityManager->flush();
+        $this->addFlash('success', 'Réservation ajoutée avec succès.');
+        return $this->redirectToRoute('app_rental_list'); // Vérifie bien que tu rediriges vers la bonne route
     }
+
+    return $this->render('rental/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
+
 
     // 📌 Formulaire pour mettre à jour une réservation
     #[Route('/admin/rental/{id}/edit', name: 'app_rental_edit', methods: ['GET', 'POST'])]
-    public function update(Request $request, RentalRepository $rentalRepository, EntityManagerInterface $entityManager, int $id): Response
-    {
-        $rental = $rentalRepository->find($id);
+public function update(Request $request, RentalRepository $rentalRepository, EntityManagerInterface $entityManager, int $id): Response
+{
+    $rental = $rentalRepository->find($id);
 
-        if (!$rental) {
-            return $this->render('rental/error.html.twig', [
-                'message' => 'Réservation non trouvée',
-            ]);
-        }
-
-        if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-
-            if (isset($data['users_id'])) $rental->setUsers($data['users_id']);
-            if (isset($data['logement_id'])) $rental->setLogement($data['logement_id']);
-            if (isset($data['date_start'])) $rental->setDateStart(new \DateTime($data['date_start']));
-            if (isset($data['date_end'])) $rental->setDateEnd(new \DateTime($data['date_end']));
-            if (isset($data['nb_adulte'])) $rental->setNbAdulte($data['nb_adulte']);
-            if (isset($data['nb_child'])) $rental->setNbChild($data['nb_child']);
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_rental_list');
-        }
-
-        return $this->render('rental/edit.html.twig', [
-            'rental' => $rental,
+    if (!$rental) {
+        return $this->render('rental/error.html.twig', [
+            'message' => 'Réservation non trouvée',
         ]);
     }
+
+    // Créer le formulaire basé sur RentalType
+    $form = $this->createForm(RentalType::class, $rental);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        $this->addFlash('success', 'Réservation mise à jour avec succès.');
+        return $this->redirectToRoute('app_rental_list');
+    }
+
+    return $this->render('rental/edit.html.twig', [
+        'form' => $form->createView(), // Passe le formulaire à la vue
+        'rental' => $rental,
+    ]);
+}
+
 
     // 📌 Supprimer une réservation avec confirmation
     #[Route('/admin/rental/{id}/delete', name: 'app_rental_delete', methods: ['GET', 'POST'])]
@@ -119,4 +148,6 @@ class RentalController extends AbstractController
             'rental' => $rental,
         ]);
     }
+
+    
 }

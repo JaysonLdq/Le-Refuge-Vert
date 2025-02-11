@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ logement.label | default('Détails du logement') }}
+{% endblock %}
+
+{% block body %}
+    <div class="details-container">
+        <div class="details-card">
+            <img src="{{ asset('img/' ~ logement.imagePath) }}" alt="{{ logement.label }}">
+            <h1>{{ logement.label }}</h1>
+            
+            <p class="description">{{ logement.description }}</p>
+
+            <div class="info-section">
+                <h3>Informations du logement</h3>
+                <ul>
+                    <li>Surface : {{ logement.surface }} m²</li>
+                    <li>Capacité : {{ logement.nbPersonne }} personnes</li>
+                    <li>Emplacement : {{ logement.emplacement }}</li>
+                    <li>Prix : {{ price is not null ? price ~ '€' : 'Tarif indisponible' }}</li>
+                </ul>
+            </div>
+
+          
+        </div>
+    </div>
+
+
+  
+
+ 
+    <div class="rental-container">
+        <h1 class="text-center">Détails de la Réservation</h1>
+        <table class="rental-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Logement</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Nombre d'adultes</th>
+                    <th>Nombre d'enfants</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ rental.id }}</td>
+                    <td>{{ rental.logement.label }}</td>
+                    <td>{{ rental.dateStart|date('d/m/Y') }}</td>
+                    <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                    <td>{{ rental.nbAdulte }}</td>
+                    <td>{{ rental.nbChild }}</td>
+                    <td>
+                        <a href="{{ path('app_rental_edit', {'id': rental.id}) }}" class="btn-edit">Modifier</a>
+                        <form action="{{ path('app_rental_delete', {'id': rental.id}) }}" method="post" class="delete-form">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rental.id) }}">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Supprimer cette réservation ?');">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="back-button" onclick="window.history.back()">Retour</button>
+    </div>
+{% endblock %}
