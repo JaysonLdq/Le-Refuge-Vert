@@ -956,6 +956,55 @@ h1 {
     display: inline;
 }
 
+.equipements-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.equipements-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+.equipements-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+.equipements-section li {
+    background: #e6e6e6;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+/* Ajoute un peu de marges et de padding pour rendre les éléments plus visibles */
+select[multiple] {
+    height: 150px; /* Augmente la hauteur pour afficher plus d'options visibles */
+    width: 100%; /* Donne une largeur de 100% à l'élément pour qu'il prenne tout l'espace disponible */
+    padding: 10px; /* Ajoute du padding pour améliorer la lisibilité */
+    border: 1px solid #ccc; /* Bordure légère pour délimiter le champ */
+    border-radius: 4px; /* Bords arrondis pour un look plus moderne */
+    font-size: 16px; /* Agrandit la taille de police pour plus de confort */
+    background-color: #f9f9f9; /* Fond léger */
+    box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur totale */
+}
+
+/* Ajout d'une ombre pour un effet visuel */
+select[multiple]:focus {
+    outline: none; /* Retire l'encadrement par défaut lors de la sélection */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.75); /* Ombre bleue lors de la sélection */
+    border-color: #007bff; /* Change la couleur de la bordure lorsqu'on est en focus */
+}
+
+/* Option active (quand l'utilisateur survole ou sélectionne l'option) */
+option:checked {
+    background-color: #007bff; /* Change la couleur de fond lors de la sélection */
+    color: white; /* Texte blanc pour les options sélectionnées */
+}
+
+
+
 
 
 

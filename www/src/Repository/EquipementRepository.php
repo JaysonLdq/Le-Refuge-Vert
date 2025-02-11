@@ -40,4 +40,6 @@ class EquipementRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    
 }

@@ -67,4 +67,19 @@ class LogementRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * trouve tout les équipements 
+     * 
+     */
+    public function findAllEquipements(int $logementId)
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.equipements', 'e')
+            ->addSelect('e')
+            ->where('l.id = :logementId')
+            ->setParameter('logementId', $logementId)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -150,4 +150,32 @@ class Logement
 
         return $this;
     }
+
+    /**
+ * @return Collection<int, Equipement>
+ */
+public function getEquipements(): Collection
+{
+    return $this->equipements;
+}
+
+public function addEquipement(Equipement $equipement): static
+{
+    if (!$this->equipements->contains($equipement)) {
+        $this->equipements->add($equipement);
+        $equipement->addLogement($this);
+    }
+
+    return $this;
+}
+
+public function removeEquipement(Equipement $equipement): static
+{
+    if ($this->equipements->removeElement($equipement)) {
+        $equipement->removeLogement($this);
+    }
+
+    return $this;
+}
+
 }

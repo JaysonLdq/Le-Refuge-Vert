@@ -22,6 +22,17 @@
                 </ul>
             </div>
 
+            <div class="equipements-section">
+                <h3>Équipements</h3>
+                <ul>
+                    {% for equipement in equipements %}
+                        <li>{{ equipement.label}}</li>
+                    {% else %}
+                        <li>Aucun équipement disponible.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
             <button class="back-button" onclick="window.history.back()">Retour</button>
         </div>
     </div>

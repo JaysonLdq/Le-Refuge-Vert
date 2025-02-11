@@ -10,6 +10,7 @@ use App\Repository\LogementRepository;
 use App\Repository\TarifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Saison;
+use App\Repository\EquipementRepository;
 
 class HomeController extends AbstractController
 {
@@ -95,9 +96,15 @@ class HomeController extends AbstractController
         LogementRepository $logementRepository,
         TarifRepository $tarifRepository,
         SaisonRepository $saisonRepository,
+        EquipementRepository $equipementRepository,
         EntityManagerInterface $em,
         int $id
     ): Response {
+
+        
+
+
+
         // Récupérer le logement par son ID
         $logement = $logementRepository->find($id);
     
@@ -135,6 +142,9 @@ class HomeController extends AbstractController
                 dump("Nouvelle saison créée :", $saisonActuelle);
             }
         }
+
+        $equipements = $logement->getEquipements(); 
+
     
         // Récupérer le tarif du logement en fonction de la saison
         $tarif = null;
@@ -149,7 +159,8 @@ class HomeController extends AbstractController
         return $this->render('home/details.html.twig', [
             'logement' => $logement,
             'saison' => $saisonActuelle,
-            'price' => $price
+            'price' => $price,
+            'equipements' => $equipements
         ]);
     }
     
