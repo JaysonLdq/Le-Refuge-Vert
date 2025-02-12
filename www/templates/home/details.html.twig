@@ -18,7 +18,7 @@
                     <li>Surface : {{ logement.surface }} m²</li>
                     <li>Capacité : {{ logement.nbPersonne }} personnes</li>
                     <li>Emplacement : {{ logement.emplacement }}</li>
-                    <li>Prix : {{ price is not null ? price ~ '€' : 'Tarif indisponible' }}</li>
+                    <li>Prix : {{ price is not null ? price ~ '€/nuits' : 'Tarif indisponible' }}</li>
                 </ul>
             </div>
 
@@ -33,10 +33,8 @@
                 </ul>
             </div>
 
-            <!-- Formulaire de réservation -->
             <div class="reservation-section">
                 <h3>Réservez maintenant</h3>
-
                 {{ form_start(reservationForm) }}
 
                 <!-- Affichage des erreurs générales du formulaire -->
@@ -45,28 +43,28 @@
                 {% endfor %}
 
                 <!-- Affichage des erreurs pour la date de début -->
-                {{ form_row(reservationForm.dateStart) }}
                 {% for error in reservationForm.dateStart.vars.errors %}
                     <div class="error-message">{{ error.message }}</div>
                 {% endfor %}
+                {{ form_row(reservationForm.dateStart) }}
 
                 <!-- Affichage des erreurs pour la date de fin -->
-                {{ form_row(reservationForm.dateEnd) }}
                 {% for error in reservationForm.dateEnd.vars.errors %}
                     <div class="error-message">{{ error.message }}</div>
                 {% endfor %}
+                {{ form_row(reservationForm.dateEnd) }}
 
                 <!-- Affichage des erreurs pour le nombre d'adultes -->
-                {{ form_row(reservationForm.nbAdulte) }}
                 {% for error in reservationForm.nbAdulte.vars.errors %}
                     <div class="error-message">{{ error.message }}</div>
                 {% endfor %}
+                {{ form_row(reservationForm.nbAdulte) }}
 
                 <!-- Affichage des erreurs pour le nombre d'enfants -->
-                {{ form_row(reservationForm.nbChild) }}
                 {% for error in reservationForm.nbChild.vars.errors %}
                     <div class="error-message">{{ error.message }}</div>
                 {% endfor %}
+                {{ form_row(reservationForm.nbChild) }}
 
                 <!-- Bouton de validation -->
                 <button type="submit">Réserver</button>
@@ -75,6 +73,8 @@
             </div>
 
             <button class="back-button" onclick="window.history.back()">Retour</button>
+
         </div>
     </div>
+
 {% endblock %}

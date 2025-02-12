@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmer la réservation{% endblock %}
+
+{% block body %}
+
+<div class="rental-container">
+    <h1>Confirmer la réservation</h1>
+
+    <!-- ✅ Message de confirmation -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.dateStart) }}
+            {{ form_widget(form.dateStart) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.dateEnd) }}
+            {{ form_widget(form.dateEnd) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.nbAdulte) }}
+            {{ form_widget(form.nbAdulte) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.nbChild) }}
+            {{ form_widget(form.nbChild) }}
+        </div>
+
+        <div>
+            <label for="nbDays">Nombres de jours</label>
+            <p>{{ nbDays }}</p>
+        </div>
+
+        <div>
+            <label for="price">Prix par nuits :</label>
+            <p>{{ price is not null ? price  ~ '€' : 'Prix non calculé' }}</p>
+        </div>
+
+        <div>
+            <label for="totalPrice">Prix total :</label>
+            <p>{{ totalPrice is not null ? totalPrice ~ '€' : 'Prix non calculé' }}</p>
+        </div> 
+
+        <a href="/" class="btn btn-primary">Confirmer</a>
+    {{ form_end(form) }}
+
+    <button class="btn btn-secondary" onclick="window.history.back()">Annuler</button>
+</div>
+
+{% endblock %}

@@ -1083,6 +1083,13 @@ option:checked {
     font-weight: bold;
 }
 
+/* Personnalisation de l'apparence des dates désactivées */
+.flatpickr-disabled {
+    background-color: red !important;  /* Couleur rouge pour les dates désactivées */
+    color: white !important;
+}
+
+
 
 
 
