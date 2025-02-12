@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Saison;
 use App\Form\RentalType;
 use App\Repository\EquipementRepository;
+use App\Repository\RentalRepository;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -101,65 +103,110 @@ class HomeController extends AbstractController
         TarifRepository $tarifRepository,
         SaisonRepository $saisonRepository,
         EquipementRepository $equipementRepository,
+        RentalRepository $rentalRepository,
         EntityManagerInterface $em,
-        Request $request,  // On prend bien Request
+        Request $request,
         int $id
     ): Response {
-
+    
         // Récupérer le logement par son ID
         $logement = $logementRepository->find($id);
-
+    
         // Vérifier si le logement existe
         if (!$logement) {
             throw $this->createNotFoundException('Logement non trouvé');
         }
-
-        // Récupérer la saison actuelle
+    
+        // Récupération de la saison actuelle
         $saisonActuelle = $saisonRepository->findSeason();
-
+        dump("Saison Actuelle :", $saisonActuelle);
+    
         // Si aucune saison actuelle n'est trouvée, rechercher une saison par défaut
         if (!$saisonActuelle) {
-            // Logique pour la saison actuelle (comme dans ton exemple)
+            dump("Aucune saison actuelle trouvée, recherche d'une saison par défaut...");
+    
+            $saisonActuelle = $saisonRepository->createQueryBuilder('s')
+                ->where('s.label IN (:defaultSeasons)')
+                ->setParameter('defaultSeasons', ['Haute saison', 'Basse saison', 'Hors saison'])
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+    
+            // Si aucune saison par défaut n'existe, création d'une nouvelle saison "Haute saison"
+            if (!$saisonActuelle) {
+                dump("Aucune saison par défaut trouvée, création de 'Haute saison'...");
+    
+                $saisonActuelle = new Saison();
+                $saisonActuelle->setLabel("Haute saison");
+                $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
+                $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
+    
+                $em->persist($saisonActuelle);
+                $em->flush();
+    
+                dump("Nouvelle saison créée :", $saisonActuelle);
+            }
         }
-
+    
         // Récupérer les équipements
         $equipements = $logement->getEquipements();
-
+    
         // Récupérer le tarif du logement
         $tarif = null;
         if ($saisonActuelle) {
             $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
         }
-
+    
         $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
-
+    
         // Créer un objet de réservation
         $reservation = new Rental();
         $reservationForm = $this->createForm(RentalType::class, $reservation);
-
-       // Récupérer l'utilisateur connecté
-        $user = $this->getUser();
-        if ($user) {
-        // Utiliser la méthode `setUsers` pour lier l'utilisateur à la réservation
-                $reservation->setUsers($user);  // Correction ici, il faut utiliser `setUsers`
-        }
-
-
+    
         // Gérer la soumission du formulaire
         $reservationForm->handleRequest($request);
         if ($reservationForm->isSubmitted() && $reservationForm->isValid()) {
-            // Lier la réservation au logement
-            $reservation->setLogement($logement);
-            $em->persist($reservation);
-            $em->flush();
+    
+            // Vérifier si l'utilisateur est connecté
+            $user = $this->getUser();
+            if (!$user) {
+                // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+                $this->addFlash('error', 'Vous devez être connecté pour effectuer une réservation.');
+                return $this->redirectToRoute('app_login');  // Assurez-vous que la route 'app_login' correspond à ta route de connexion
+            }
+    
+            // Lier l'utilisateur à la réservation
+            $reservation->setUsers($user);
+    
+           // Vérification si les dates de la nouvelle réservation se chevauchent avec une réservation existante
+$existingReservations = $rentalRepository->createQueryBuilder('r')
+->where('r.logement = :logement')
+->andWhere('r.dateStart < :dateEnd')  // La date de début de l'existant doit être avant la date de fin
+->andWhere('r.dateEnd > :dateStart')  // La date de fin de l'existant doit être après la date de début
+->setParameter('logement', $logement)
+->setParameter('dateStart', $reservation->getDateStart())
+->setParameter('dateEnd', $reservation->getDateEnd())
+->getQuery()
+->getResult(); // Utilisation de getResult() au lieu de getOneOrNullResult()
 
-            // Message de succès
-            $this->addFlash('success', 'Réservation effectuée avec succès!');
-            
-            // Redirection après soumission
-            return $this->redirectToRoute('logement_detail', ['id' => $id]);
-        }
+if (count($existingReservations) > 0) {
+// Si des réservations existent, ajouter une erreur au formulaire
+$reservationForm->addError(new FormError('Cette période est déjà réservée. Veuillez choisir une autre date.'));
+} else {
+// Si pas de conflit, lier la réservation au logement
+$reservation->setLogement($logement);
+$em->persist($reservation);
+$em->flush();
 
+// Message de succès
+$this->addFlash('success', 'Réservation effectuée avec succès!');
+
+// Redirection après soumission
+return $this->redirectToRoute('logement_detail', ['id' => $id]);
+}
+
+}
+    
         // Passer les données à la vue
         return $this->render('home/details.html.twig', [
             'logement' => $logement,
@@ -169,5 +216,5 @@ class HomeController extends AbstractController
             'reservationForm' => $reservationForm->createView(),
         ]);
     }
+    
 }
-

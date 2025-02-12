@@ -1076,6 +1076,13 @@ option:checked {
     background-color: #5a6268; /* Couleur plus foncée au survol */
 }
 
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 
 
 

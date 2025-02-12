@@ -36,13 +36,41 @@
             <!-- Formulaire de réservation -->
             <div class="reservation-section">
                 <h3>Réservez maintenant</h3>
+
                 {{ form_start(reservationForm) }}
+
+                <!-- Affichage des erreurs générales du formulaire -->
+                {% for error in reservationForm.vars.errors %}
+                    <div class="error-message">{{ error.message }}</div>
+                {% endfor %}
+
+                <!-- Affichage des erreurs pour la date de début -->
                 {{ form_row(reservationForm.dateStart) }}
+                {% for error in reservationForm.dateStart.vars.errors %}
+                    <div class="error-message">{{ error.message }}</div>
+                {% endfor %}
+
+                <!-- Affichage des erreurs pour la date de fin -->
                 {{ form_row(reservationForm.dateEnd) }}
+                {% for error in reservationForm.dateEnd.vars.errors %}
+                    <div class="error-message">{{ error.message }}</div>
+                {% endfor %}
+
+                <!-- Affichage des erreurs pour le nombre d'adultes -->
                 {{ form_row(reservationForm.nbAdulte) }}
+                {% for error in reservationForm.nbAdulte.vars.errors %}
+                    <div class="error-message">{{ error.message }}</div>
+                {% endfor %}
+
+                <!-- Affichage des erreurs pour le nombre d'enfants -->
                 {{ form_row(reservationForm.nbChild) }}
-                <!-- Ajout du bouton de validation -->
+                {% for error in reservationForm.nbChild.vars.errors %}
+                    <div class="error-message">{{ error.message }}</div>
+                {% endfor %}
+
+                <!-- Bouton de validation -->
                 <button type="submit">Réserver</button>
+                
                 {{ form_end(reservationForm) }}
             </div>
 
