@@ -1,27 +1,118 @@
 /* Fond de la page */
 body {
     background: #c0d1bd;
-    font-family: 'Arial', sans-serif; /* Police standard */
+    font-family: 'Arial', sans-serif;
     color: #333;
     margin: 0;
     padding: 0;
 }
 
 /* Conteneur principal */
-.container {
-    margin-top: 30px;
-    padding: 0 20px;
+.profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* En-tête de la page */
+/* Titre principal de la page */
 h1 {
     color: #2c3e50;
     font-size: 2.5rem;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     font-weight: 600;
+    text-align: center;
 }
 
-/* Style d'alerte pour la période hors saison */
+/* Vignette utilisateur */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Image de profil */
+.profile-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+/* Conteneur des détails utilisateur */
+.profile-card .user-details {
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.profile-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-card li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* Rôles utilisateur */
+.roles {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Style du bouton */
+.button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+}
+
+/* Amélioration de l'apparence des liens */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style pour la période hors saison */
 .alert-warning {
     background-color: #fff3cd;
     border-color: #ffeeba;
@@ -34,85 +125,69 @@ h1 {
 
 /* Container global */
 .container {
+    margin-top: 30px;
+    padding: 0 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
-/* Vignettes dans une grille */
+/* Style des vignettes dans une grille */
 .row {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Espacement entre les vignettes */
-    justify-content: center; /* Centrer les vignettes horizontalement */
+    gap: 20px;
+    justify-content: center;
 }
 
-/* Carte de la vignette */
 /* Carte de la vignette */
 .card {
-    width: 300px; /* Largeur fixe pour chaque vignette */
-    height: 400px; /* Hauteur fixe pour chaque vignette */
+    width: 300px;
+    height: 400px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Empêche que le contenu dépasse */
+    overflow: hidden;
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Shadow amélioré pour plus d'intensité */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animation au survol */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-/* Ajout de l'effet de survol avec une ombre plus forte */
 .card:hover {
-    transform: translateY(-10px); /* Légère translation pour l'effet de survol */
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* Shadow plus intense au survol */
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
-
-/* Optionnel : si tu veux ajouter un fond clair derrière la vignette */
-.card-body {
-    background-color: #fff;
-}
-
 
 /* Image de la vignette */
 .card-img-top {
     width: 100%;
     height: 200px;
-    object-fit: cover; /* Garde l'aspect de l'image tout en la recadrant */
+    object-fit: cover;
 }
 
-/* Corps de la carte contenant le texte */
+/* Corps de la carte */
 .card-body {
     padding: 15px;
     background-color: #afd7a9;
-    flex-grow: 1; /* Permet à la description de prendre l'espace restant */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Titre de la carte */
 .card-title {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Description */
 .card-text {
     font-size: 0.9rem;
     color: #555;
-    flex-grow: 1; /* Permet à la description de s'étendre pour occuper l'espace disponible */
+    flex-grow: 1;
     margin-bottom: 10px;
-    word-wrap: break-word; /* Assure que le texte s'adapte à l'intérieur de la carte */
-    overflow-wrap: break-word; /* Une autre méthode pour forcer un retour à la ligne si nécessaire */
+    word-wrap: break-word;
 }
 
-/* Prix */
-.fw-bold {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-
+/* Détails de la carte */
 .details-container {
     display: flex;
     justify-content: center;
@@ -141,6 +216,7 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* Bouton de retour */
 .back-button {
     background: #4CAF50;
     color: white;
@@ -157,17 +233,7 @@ h1 {
     background: #45a049;
 }
 
-.logement-item-link {
-    text-decoration: none;
-    color: #333;
-}
-
-.logement-item-link:hover {
-    text-decoration: none;
-    color: #555454;
-}
-
-/* Styles généraux de la navbar */
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -200,18 +266,16 @@ h1 {
     text-decoration: underline;
 }
 
-/* User Dropdown */
-/* Assurez-vous que la navbar-user est en position relative */
+/* Dropdown menu */
 .navbar-user {
     position: relative;
     display: inline-block;
 }
 
-/* Ajustement du dropdown pour qu'il soit bien collé sous l'utilisateur */
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% + 5px); /* Juste en dessous avec un petit espace */
+    top: calc(100% + 5px);
     right: 0;
     background-color: #416642;
     border-radius: 8px;
@@ -219,28 +283,24 @@ h1 {
     list-style-type: none;
     margin: 0;
     padding: 5px 0;
-    min-width: 180px; /* Taille minimum du menu */
+    min-width: 180px;
     z-index: 999;
 }
 
-/* Affichage au survol */
 .user-dropdown:hover .dropdown-menu {
     display: block;
 }
 
-/* Ajustement des éléments */
 .dropdown-menu li {
     padding: 8px 15px;
     color: whitesmoke;
     text-align: left;
-    white-space: nowrap; /* Évite les retours à la ligne inutiles */
 }
 
 .dropdown-menu li:hover {
     background-color: #416642;
 }
 
-/* Style des liens */
 .dropdown-menu a {
     color: whitesmoke;
     text-decoration: none;
@@ -254,7 +314,7 @@ h1 {
     border-radius: 5px;
 }
 
-/* Style pour le bouton de connexion */
+/* Bouton de connexion */
 .login-link {
     background-color: #4ea44e;
     color: white;
@@ -266,831 +326,3 @@ h1 {
 .login-link:hover {
     background-color: #4b8c4b;
 }
-
-/* ======= STYLISATION DE LA PAGE DE CONNEXION ======= */
-.game-form {
-    max-width: 400px;
-    margin: 80px auto;
-    background: #b0e09f;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* TITRE */
-.game-form h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-
-/* ALERTES & MESSAGES */
-.alert {
-    background: #ffdede;
-    color: #a94442;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-/* UTILISATEUR CONNECTÉ */
-.user-logged-in {
-    background: #c0d1bd;
-    color: #2c3e50;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    font-size: 14px;
-}
-
-/* FORM GROUP */
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-/* CENTRER ET ÉQUILIBRER LES CHAMPS */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%; /* Assure que tout reste centré */
-    color: #2c3e50
-}
-
-/* CHAMPS FORMULAIRE AVEC MARGES ÉGALES */
-.form-control {
-    width: 90%; /* Ajuste la largeur pour équilibrer la marge */
-    max-width: 320px;
-    text-align: left; /* Garde le texte aligné à gauche */
-    padding: 10px;
-    border: 1px solid #9ac48a;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #9ac48a;
-}
-
-
-.form-control:focus {
-    border: 1px solid #4CAF50;
-}
-
-/* BOUTON DE SOUMISSION */
-.btn-submit {
-    width: 100%;
-    padding: 12px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-submit i {
-    font-size: 18px;
-}
-
-.btn-submit:hover {
-    background: #388E3C;
-}
-
-/* LIEN D'AUTHENTIFICATION */
-.link-auth {
-    display: block;
-    margin-top: 10px;
-    color: #2c3e50;
-    font-size: 14px;
-    text-decoration: none;
-    transition: color 0.3s ease-in-out;
-}
-
-.link-auth:hover {
-    color: #4CAF50;
-}
-
-/* ========== DASHBOARD STYLING ========== */
-.dashboard-container {
-    max-width: 800px;
-    margin: 80px auto;
-    background: #afd7a9;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* TITRE PRINCIPAL */
-.dashboard-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 15px;
-}
-
-/* MESSAGE DE BIENVENUE */
-.dashboard-greeting {
-    font-size: 20px;
-    color: #4CAF50;
-    margin-bottom: 25px;
-}
-
-/* CONTAINER DES BOUTONS */
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* STYLE DES BOUTONS */
-.btn {
-    display: block;
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 12px 20px;
-    border-radius: 5px;
-    transition: background 0.3s ease-in-out;
-    text-align: center;
-}
-
-/* STYLES INDIVIDUELS DES BOUTONS */
-.btn-view-locations {
-    background: #4CAF50;
-}
-
-.btn-view-reservations {
-    background: #3498db;
-}
-
-.btn-manage-users {
-    background: #e74c3c;
-}
-
-/* HOVER EFFECT */
-.btn:hover {
-    opacity: 0.8;
-}
-
-/* RESPONSIVE - ADAPTATION POUR ÉCRANS MOBILES */
-@media (max-width: 600px) {
-    .dashboard-container {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .btn {
-        padding: 10px;
-        font-size: 14px;
-    }
-}
-
-/* ======= CONTAINER PRINCIPAL ======= */
-.logement-list-container {
-    max-width: 1000px;
-    margin: 60px auto;
-    background: #f9f9f9;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* TITRE PRINCIPAL */
-.logement-list-container h1 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-/* BOUTON AJOUTER UN LOGEMENT */
-.add-logement-btn {
-    display: inline-block;
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 12px 20px;
-    border-radius: 5px;
-    background: #4CAF50;
-    transition: background 0.3s ease-in-out;
-    margin-bottom: 20px;
-}
-
-.add-logement-btn:hover {
-    background: #388E3C;
-}
-
-/* ======= TABLEAU ======= */
-.logement-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.logement-table th, .logement-table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.logement-table th {
-    background: #4CAF50;
-    color: white;
-    font-weight: bold;
-}
-
-.logement-table td {
-    color: #333;
-}
-
-/* IMAGE LOGEMENT */
-.logement-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-/* ======= ACTIONS ======= */
-.logement-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* LIENS */
-.view-link, .edit-link, .delete-link {
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s ease-in-out;
-}
-
-/* COULEURS DES ACTIONS */
-.view-link {
-    background: #3498db;
-    color: white;
-}
-
-.edit-link {
-    background: #f1c40f;
-    color: white;
-}
-
-.delete-link {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-/* HOVER EFFECT */
-.view-link:hover {
-    background: #2980b9;
-}
-
-.edit-link:hover {
-    background: #d4ac0d;
-}
-
-.delete-link:hover {
-    background: #c0392b;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .logement-table th, .logement-table td {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .logement-actions {
-        flex-direction: column;
-    }
-
-    .add-logement-btn {
-        width: 100%;
-        text-align: center;
-    }
-}
-
-
-.logement-form-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.logement-form-container h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #ffffff;
-}
-
-.submit-button {
-    width: 100%;
-    padding: 12px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-}
-
-.submit-button:hover {
-    background: #388E3C;
-}
-
-/* ========================= */
-/* STYLISATION DU FORMULAIRE */
-/* ========================= */
-
-.form-container {
-    max-width: 600px;
-    margin: 50px auto;
-    background: #f9f9f9;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* TITRE */
-.form-container h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-
-/* CHAMPS DE FORMULAIRE */
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.form-group label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #2c3e50;
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* INPUTS */
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    outline: none;
-    transition: border 0.3s ease-in-out;
-}
-
-.form-control:focus {
-    border: 1px solid #4CAF50;
-}
-
-/* IMAGE PREVIEW */
-.image-preview {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.image-preview img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    padding: 5px;
-    background: white;
-}
-
-/* BOUTONS */
-.btn {
-    display: inline-block;
-    padding: 10px 15px;
-    text-align: center;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-}
-
-.btn-primary {
-    background: #4CAF50;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #388E3C;
-}
-
-.btn-secondary {
-    background: #777;
-    color: white;
-    margin-top: 15px;
-}
-
-.btn-secondary:hover {
-    background: #555;
-}
-
-/* RESPONSIVE */
-@media screen and (max-width: 768px) {
-    .form-container {
-        max-width: 90%;
-    }
-}
-
-/* ==========================
-   TABLEAU DES UTILISATEURS
-   ========================== */
-   
-/* Titre du tableau */
-.table-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-/* Conteneur du tableau */
-.user-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #f9f9f9;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* En-tête du tableau */
-.user-table thead {
-    background-color: #416642;
-    color: white;
-}
-
-.user-table th {
-    padding: 15px;
-    text-align: left;
-    font-size: 16px;
-}
-
-/* Lignes du tableau */
-.user-table tr {
-    border-bottom: 1px solid #ddd;
-}
-
-/* Cellules du tableau */
-.user-table td {
-    padding: 12px;
-    font-size: 14px;
-    color: #333;
-}
-
-/* Alternance des couleurs des lignes pour lisibilité */
-.user-table tbody tr:nth-child(even) {
-    background: #e8f5e9;
-}
-
-/* Lignes au survol */
-.user-table tbody tr:hover {
-    background: #c8e6c9;
-    transition: background 0.3s ease-in-out;
-}
-
-/* Actions */
-.action-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-/* Boutons d'action */
-.btn-view,
-.btn-edit {
-    padding: 8px 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background 0.3s ease-in-out;
-}
-
-/* Bouton Voir */
-.btn-view {
-    background: #4CAF50;
-    color: white;
-    border: 1px solid #388E3C;
-}
-
-.btn-view:hover {
-    background: #388E3C;
-}
-
-/* Bouton Éditer */
-.btn-edit {
-    background: #fbc02d;
-    color: white;
-    border: 1px solid #f9a825;
-}
-
-.btn-edit:hover {
-    background: #f9a825;
-}
-
-/* Pas d'utilisateur trouvé */
-.no-users {
-    text-align: center;
-    font-weight: bold;
-    color: #757575;
-    padding: 15px;
-    font-size: 16px;
-}
-
-.card-user {
-    width: 300px;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-/* ======= STYLE POUR LES RÉSERVATIONS ======= */
-
-.rental-container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.rental-container h1 {
-    font-size: 28px;
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.no-rental {
-    font-size: 18px;
-    color: #888;
-    margin-top: 20px;
-}
-
-/* TABLEAU DES RÉSERVATIONS */
-.rental-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.rental-table th, 
-.rental-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-}
-
-.rental-table th {
-    background: #4CAF50;
-    color: white;
-    font-size: 16px;
-}
-
-.rental-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-/* STATUTS */
-.status-confirmed {
-    color: #2E7D32;
-    font-weight: bold;
-}
-
-.status-pending {
-    color: #E65100;
-    font-weight: bold;
-}
-
-/* BOUTONS */
-.btn-view, .btn-edit, .btn-delete {
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 14px;
-    text-decoration: none;
-    transition: background 0.3s;
-}
-
-.btn-view {
-    background: #3498db;
-    color: white;
-}
-
-.btn-edit {
-    background: #f1c40f;
-    color: white;
-}
-
-.btn-delete {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-view:hover {
-    background: #2980b9;
-}
-
-.btn-edit:hover {
-    background: #d4ac0d;
-}
-
-.btn-delete:hover {
-    background: #c0392b;
-}
-
-/* FORMULAIRE DE SUPPRESSION */
-.delete-form {
-    display: inline;
-}
-
-.equipements-section {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-.equipements-section h3 {
-    color: #333;
-    margin-bottom: 10px;
-}
-.equipements-section ul {
-    list-style-type: none;
-    padding: 0;
-}
-.equipements-section li {
-    background: #e6e6e6;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-}
-
-/* Ajoute un peu de marges et de padding pour rendre les éléments plus visibles */
-select[multiple] {
-    height: 150px; /* Augmente la hauteur pour afficher plus d'options visibles */
-    width: 100%; /* Donne une largeur de 100% à l'élément pour qu'il prenne tout l'espace disponible */
-    padding: 10px; /* Ajoute du padding pour améliorer la lisibilité */
-    border: 1px solid #ccc; /* Bordure légère pour délimiter le champ */
-    border-radius: 4px; /* Bords arrondis pour un look plus moderne */
-    font-size: 16px; /* Agrandit la taille de police pour plus de confort */
-    background-color: #f9f9f9; /* Fond léger */
-    box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur totale */
-}
-
-/* Ajout d'une ombre pour un effet visuel */
-select[multiple]:focus {
-    outline: none; /* Retire l'encadrement par défaut lors de la sélection */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.75); /* Ombre bleue lors de la sélection */
-    border-color: #007bff; /* Change la couleur de la bordure lorsqu'on est en focus */
-}
-
-/* Option active (quand l'utilisateur survole ou sélectionne l'option) */
-option:checked {
-    background-color: #007bff; /* Change la couleur de fond lors de la sélection */
-    color: white; /* Texte blanc pour les options sélectionnées */
-}
-
-
-/* Style global du formulaire de réservation */
-.reservation-section {
-    background-color: #f9f9f9; /* Fond clair */
-    border-radius: 8px; /* Bords arrondis */
-    padding: 20px; /* Espacement interne */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère autour du formulaire */
-    margin-top: 20px; /* Espacement avec le contenu précédent */
-}
-
-.reservation-section h3 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 15px; /* Espacement en bas du titre */
-    color: #333; /* Couleur du texte */
-}
-
-/* Style des champs du formulaire */
-.reservation-section input,
-.reservation-section select,
-.reservation-section textarea {
-    width: 100%; /* Prendre toute la largeur */
-    padding: 10px; /* Espacement interne */
-    margin-bottom: 15px; /* Espacement entre les champs */
-    border: 1px solid #ccc; /* Bordure légère */
-    border-radius: 4px; /* Bords arrondis */
-    font-size: 1rem; /* Taille de la police */
-    box-sizing: border-box; /* Prend en compte les bordures dans les dimensions */
-}
-
-.reservation-section input:focus,
-.reservation-section select:focus,
-.reservation-section textarea:focus {
-    border-color: #007bff; /* Couleur de bordure bleue quand le champ est sélectionné */
-    outline: none; /* Supprime l'encadrement par défaut */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Ajoute une légère ombre bleue */
-}
-
-/* Style du bouton de soumission */
-.reservation-section button[type="submit"] {
-    background-color: #007bff; /* Fond bleu */
-    color: white; /* Texte blanc */
-    border: none; /* Pas de bordure */
-    padding: 10px 20px; /* Espacement autour du texte */
-    border-radius: 5px; /* Bords arrondis */
-    font-size: 1rem; /* Taille de la police */
-    cursor: pointer; /* Pointeur pour indiquer que c'est cliquable */
-    transition: background-color 0.3s ease; /* Animation lors du survol */
-    width: 100%; /* Largeur du bouton sur tout le formulaire */
-}
-
-/* Changement de couleur au survol du bouton */
-.reservation-section button[type="submit"]:hover {
-    background-color: #0056b3; /* Couleur plus foncée au survol */
-}
-
-/* Style du bouton de retour */
-.back-button {
-    display: inline-block;
-    background-color: #6c757d; /* Couleur gris */
-    color: white; /* Texte blanc */
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 15px; /* Espacement au-dessus du bouton */
-    text-decoration: none; /* Supprime la décoration de lien */
-    font-size: 1rem;
-    text-align: center; /* Centrer le texte */
-}
-
-.back-button:hover {
-    background-color: #5a6268; /* Couleur plus foncée au survol */
-}
-
-.error-message {
-    color: red;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-/* Personnalisation de l'apparence des dates désactivées */
-.flatpickr-disabled {
-    background-color: red !important;  /* Couleur rouge pour les dates désactivées */
-    color: white !important;
-}
-
-
-
-
-
-

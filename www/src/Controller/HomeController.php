@@ -11,11 +11,14 @@ use App\Repository\LogementRepository;
 use App\Repository\TarifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Saison;
+use App\Entity\User;
 use App\Form\RentalType;
+use App\Form\UserType;
 use App\Repository\EquipementRepository;
 use App\Repository\RentalRepository;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeController extends AbstractController
 {
@@ -55,56 +58,102 @@ class HomeController extends AbstractController
     }
 
     #[Route('/logement/{id}', name: 'logement_detail', methods: ['GET', 'POST'])]
-public function logementById(
-    LogementRepository $logementRepository,
-    TarifRepository $tarifRepository,
-    SaisonRepository $saisonRepository,
-    EquipementRepository $equipementRepository,
-    RentalRepository $rentalRepository,
-    EntityManagerInterface $em,
-    Request $request,
-    int $id
-): Response {
-    $logement = $logementRepository->find($id);
-
-    if (!$logement) {
-        throw $this->createNotFoundException('Logement non trouvé');
-    }
-
-    $saisonActuelle = $saisonRepository->findSeason() ??
-        $saisonRepository->findOneBy(['label' => 'Haute saison']);
-
-    $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
-    $price = $tarif ? $tarif->getPrice() : 0;
-
-    $reservation = new Rental();
-    $reservationForm = $this->createForm(RentalType::class, $reservation);
-    $reservationForm->handleRequest($request);
-
-    if ($reservationForm->isSubmitted() && $reservationForm->isValid()) {
-        $user = $this->getUser();
-        if (!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour réserver.');
-            return $this->redirectToRoute('app_login');
+    public function logementById(
+        LogementRepository $logementRepository,
+        TarifRepository $tarifRepository,
+        SaisonRepository $saisonRepository,
+        RentalRepository $rentalRepository,
+        EntityManagerInterface $em,
+        Request $request,
+        int $id
+    ): Response {
+        $logement = $logementRepository->find($id);
+        if (!$logement) {
+            throw $this->createNotFoundException('Logement non trouvé');
         }
+    
+        $saisonActuelle = $saisonRepository->findSeason() ??
+            $saisonRepository->findOneBy(['label' => 'Haute saison']);
+    
+        $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
+        $pricePerNight = $tarif ? $tarif->getPrice() : 0;
+    
+        // Récupérer les équipements du logement
+        $equipements = $logement->getEquipements();
+    
+        // Créer une réservation
+        $reservation = new Rental();
+        $reservationForm = $this->createForm(RentalType::class, $reservation);
+        $reservationForm->handleRequest($request);
+    
+        // Initialisation des variables
+        $daysCount = 0;
+        $totalPrice = 0;
+        $error = null;
+    
+        // Calcul automatique du nombre de jours AVANT soumission
+        $dateStart = $reservation->getDateStart();
+        $dateEnd = $reservation->getDateEnd();
+    
+        if ($dateStart && $dateEnd && $dateEnd > $dateStart) {
+            $interval = $dateStart->diff($dateEnd);
+            $daysCount = $interval->days;
+            $totalPrice = $daysCount * $pricePerNight;
+        }
+    
+        // Gestion de la soumission du formulaire
+        if ($reservationForm->isSubmitted() && $reservationForm->isValid()) {
+            $user = $this->getUser();
+            if (!$user) {
+                $this->addFlash('error', 'Vous devez être connecté pour réserver.');
+                return $this->redirectToRoute('app_login');
+            }
+    
+            // Vérifier que les dates sont valides
+            if (!$dateStart || !$dateEnd || $dateEnd <= $dateStart) {
+                $reservationForm->addError(new FormError('Les dates sélectionnées ne sont pas valides.'));
+            } else {
+                // Vérifier si la période est déjà réservée
+                $existingReservations = $rentalRepository->createQueryBuilder('r')
+                    ->where('r.logement = :logement')
+                    ->andWhere('r.dateStart < :dateEnd')
+                    ->andWhere('r.dateEnd > :dateStart')
+                    ->setParameter('logement', $logement)
+                    ->setParameter('dateStart', $dateStart)
+                    ->setParameter('dateEnd', $dateEnd)
+                    ->getQuery()
+                    ->getResult();
+    
+                if (count($existingReservations) > 0) {
+                    $reservationForm->addError(new FormError('Cette période est déjà réservée. Veuillez choisir une autre date.'));
+                } else {
+                    // Enregistrement de la réservation
+                    $reservation->setUsers($user);
+                    $reservation->setLogement($logement);
+                    $em->persist($reservation);
+                    $em->flush();
+    
+                    // Redirection après validation
+                    $this->addFlash('success', 'Réservation confirmée avec succès!');
+                    return $this->redirectToRoute('home');
+                }
+            }
+        }
+    
+        return $this->render('home/details.html.twig', [
+            'logement' => $logement,
+            'saison' => $saisonActuelle,
+            'price' => $pricePerNight,
+            'equipements' => $equipements, // ✅ Equipements ajoutés ici
+            'nbDays' => $daysCount,
+            'totalPrice' => $totalPrice,
+            'reservationForm' => $reservationForm->createView(),
+            'error' => $error
+        ]);
 
-        $reservation->setUsers($user);
-        $reservation->setLogement($logement);
-        $em->persist($reservation);
-        $em->flush();
 
-       
-        return $this->redirectToRoute('reservation_page', ['id' => $reservation->getId()]);
     }
-
-    return $this->render('home/details.html.twig', [
-        'logement' => $logement,
-        'saison' => $saisonActuelle,
-        'price' => $price,
-        'equipements' => $logement->getEquipements(),
-        'reservationForm' => $reservationForm->createView(),
-    ]);
-}
+    
 
 #[Route('/reservation/{id}', name: 'reservation_page', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
 
@@ -215,4 +264,25 @@ public function update(
     ]);
 }
 
+#[Route('/profil', name: 'app_profil', methods: ['GET', 'POST'])]   
+public function profil(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+{
+    $user = $this->getUser();
+    $form = $this->createForm(UserType::class, $user, ['is_edit' => true]);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->render('user/profil.html.twig', [
+        'user' => $user,
+        'form' => $form,
+    ]);
+
+
+
+}
 }

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil utilisateur{% endblock %}
+
+{% block body %}
+    <div class="profile-container">
+        <h1>Mon Profil</h1>
+
+        <div class="profile-card">
+          
+
+            <!-- Détails de l'utilisateur -->
+            <ul class="user-details">
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>Prénom:</strong> {{ user.firstname }}</li>
+                <li><strong>Nom:</strong> {{ user.lastname }}</li>
+            </ul>
+
+            <a href="{{ path('home') }}" class="button">Retour à l'accueil</a>
+        </div>
+    </div>
+{% endblock %}

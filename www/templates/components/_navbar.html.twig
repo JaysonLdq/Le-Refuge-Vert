@@ -15,7 +15,7 @@
             <div class="user-dropdown">
                 <span class="user-email">{{ app.user.firstname }}</span>
                 <ul class="dropdown-menu">
-                    {# <li><a href="{{ path('profil') }}">Mon profil</a></li> #}
+                    <li><a href="{{ path('app_profil') }}">Mon profil</a></li>
                     {% if 'ROLE_ADMIN' in app.user.roles %}
                         <li><a href="/admin/dashboard">Dashboard</a></li>
                     {% endif %}
