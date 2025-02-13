@@ -9,12 +9,8 @@
         <div class="profile-card">
           
 
-            <!-- Détails de l'utilisateur -->
-            <ul class="user-details">
-                <li><strong>Email:</strong> {{ user.email }}</li>
-                <li><strong>Prénom:</strong> {{ user.firstname }}</li>
-                <li><strong>Nom:</strong> {{ user.lastname }}</li>
-            </ul>
+
+            {{ include('user/_profil_form1.html.twig', {'button_label': 'Update'}) }}
 
             <a href="{{ path('home') }}" class="button">Retour à l'accueil</a>
         </div>

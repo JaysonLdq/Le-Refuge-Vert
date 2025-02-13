@@ -2,22 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Rental;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Saison;
+use App\Form\UserType;
+use App\Form\ProfilType;
+use App\Form\RentalType;
+use App\Repository\TarifRepository;
+use App\Repository\RentalRepository;
+use App\Repository\SaisonRepository;
+use Symfony\Component\Form\FormError;
+use App\Repository\LogementRepository;
+use App\Repository\EquipementRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\SaisonRepository;
-use App\Repository\LogementRepository;
-use App\Repository\TarifRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Saison;
-use App\Entity\User;
-use App\Form\RentalType;
-use App\Form\UserType;
-use App\Repository\EquipementRepository;
-use App\Repository\RentalRepository;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class HomeController extends AbstractController
@@ -267,7 +268,7 @@ public function update(
 public function profil(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
 {
     $user = $this->getUser();
-    $form = $this->createForm(UserType::class, $user, ['is_edit' => true]);
+    $form = $this->createForm(ProfilType::class, $user, ['is_edit' => true]);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
@@ -283,5 +284,28 @@ public function profil(Request $request, UserPasswordHasherInterface $userPasswo
 
 
 
+}
+
+#[Route('/reservation/{id}/delete', name: 'app_reservation_delete', methods: ['GET', 'POST'])]
+public function delete(Request $request, RentalRepository $rentalRepository, EntityManagerInterface $entityManager, int $id): Response
+{
+    $rental = $rentalRepository->find($id);
+
+    if (!$rental) {
+        return $this->render('rental/error.html.twig', [
+            'message' => 'Réservation non trouvée',
+        ]);
+    }
+
+    if ($request->isMethod('POST')) {
+        $entityManager->remove($rental);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('logement_detail');
+    }
+
+    return $this->render('rental/delete.html.twig', [
+        'rental' => $rental,
+    ]);
 }
 }

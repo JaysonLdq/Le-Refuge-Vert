@@ -56,6 +56,13 @@ class UserType extends AbstractType
                     'class' => 'form-control',
                     'placeholder' => 'Nom d\'utilisateur',
                 ],
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Numéro de téléphone',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Numéro de téléphone',
+                ],
             ]);
 
             if(!$options['is_edit']){

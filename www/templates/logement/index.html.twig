@@ -23,25 +23,30 @@
 			<tbody>
 				{% for logement in logements %}
 					<tr>
-						<td>{{ logement.id }}</td>
+						<td>{{ logement.logement.id }}</td>
 						<td>
-							{% if logement.imagePath %}
-								<img src="{{ asset('img/' ~ logement.imagePath) }}" alt="{{ logement.label }}" class="logement-image">
+							{% if logement.logement.imagePath %}
+								<img src="{{ asset('img/' ~ logement.logement.imagePath) }}" alt="{{ logement.logement.label }}" class="logement-image">
 							{% else %}
 								Aucune image
 							{% endif %}
 						</td>
-						<td>{{ logement.label }}</td>
-						<td>{{ logement.description|length > 50 ? logement.description|slice(0, 50) ~ '...' : logement.description }}</td>
-						<td>{{ logement.surface }}</td>
-						<td>{{ logement.nbPersonne }}</td>
-						<td>{{ logement.emplacement }}</td>
+						<td>{{ logement.logement.label }}</td>
+						<td>
+							{{ logement.logement.description|length > 50 ? logement.logement.description|slice(0, 50) ~ '...' : logement.logement.description }}
+							{% if logement.logement.description|length > 50 %}
+								<a href="{{ path('logement_detail', {'id': logement.logement.id}) }}">Voir plus</a>
+							{% endif %}
+						</td>
+						<td>{{ logement.logement.surface }}</td>
+						<td>{{ logement.logement.nbPersonne }}</td>
+						<td>{{ logement.logement.emplacement }}</td>
 						<td>
 							<div class="logement-actions">
-								<a href="{{ path('logement_detail', {'id': logement.id}) }}" class="view-link">Voir</a>
-								<a href="{{ path('app_logement_edit', {'id': logement.id}) }}" class="edit-link">Modifier</a>
-								<form action="{{ path('app_logement_delete', {'id': logement.id}) }}" method="post" style="display:inline;">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ logement.id) }}">
+								<a href="{{ path('logement_detail', {'id': logement.logement.id}) }}" class="view-link">Voir</a>
+								<a href="{{ path('app_logement_edit', {'id': logement.logement.id}) }}" class="edit-link">Modifier</a>
+								<form action="{{ path('app_logement_delete', {'id': logement.logement.id}) }}" method="post" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ logement.logement.id) }}">
 									<button type="submit" class="delete-link" onclick="return confirm('Voulez-vous vraiment supprimer ce logement ?');">
 										Supprimer
 									</button>

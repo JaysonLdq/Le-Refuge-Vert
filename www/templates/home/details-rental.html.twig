@@ -53,7 +53,10 @@
         <a href="/" class="btn btn-primary">Confirmer</a>
     {{ form_end(form) }}
 
-    <button class="btn btn-secondary" onclick="window.history.back()">Annuler</button>
+                            <form action="{{ path('app_reservation_delete', {'id': rental.id}) }}" method="post" class="delete-form">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rental.id) }}">
+                                <button type="submit" class="btn-delete" onclick="return confirm('Annuler cette réservation ?');">Annuler</button>
+                            </form>
 </div>
 
 {% endblock %}

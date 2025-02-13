@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Saisons{% endblock %}
+
+{% block body %}
+    <h1>Liste des Saisons</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Label</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for saison in saisons %}
+                <tr>
+                    <td>{{ saison.label }}</td>
+                    <td>{{ saison.dateS|date('Y-m-d') }}</td>
+                    <td>{{ saison.dateE|date('Y-m-d') }}</td>
+                    <td>
+                        <!-- Bouton pour sélectionner cette saison -->
+                        <form action="{{ path('app_saison_select', {id: saison.id}) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Appliquer à tous les tarifs</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucune saison trouvée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

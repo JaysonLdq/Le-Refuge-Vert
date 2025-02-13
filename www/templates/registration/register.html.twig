@@ -32,6 +32,12 @@
     </div>
 
     <div class="form-group">
+        {{ form_label(registrationForm.phone) }}
+        {{ form_widget(registrationForm.phone) }}
+        {{ form_errors(registrationForm.phone) }}
+    </div>
+
+    <div class="form-group">
         {{ form_label(registrationForm.agreeTerms) }}
         {{ form_widget(registrationForm.agreeTerms) }}
         {{ form_errors(registrationForm.agreeTerms) }}

@@ -14,21 +14,23 @@
         <table class="rental-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+
+                    <th>Client</th>
                     <th>Logement</th>
                     <th>Date de début</th>
                     <th>Date de fin</th>
+                    <th>Phone</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for rental in rentals %}
                     <tr>
-                        <td>{{ rental.id }}</td>
-                        {# <td>{{ rental.user.firstname }} {{ rental.user.lastname }}</td> #}
+                        <td>{{ lastname }} 
                         <td>{{ rental.logement.label }}</td>
                         <td>{{ rental.dateStart|date('d/m/Y') }}</td>
                         <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                        <td>{{ phone }}</td>
                         {# <td class="{{ rental.status == 'confirmée' ? 'status-confirmed' : 'status-pending' }}">
                             {{ rental.status }}
                         </td> #}

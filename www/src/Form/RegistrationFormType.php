@@ -19,6 +19,10 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('phone', TextType::class, [
+                'label' => 'Saisir votre numéro de téléphone',
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Saisir votre email',
                 'attr' => ['class' => 'form-control'],
@@ -56,7 +60,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Saisir votre nom',
                 'attr' => ['class' => 'form-control'],
             ])
-        ;
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

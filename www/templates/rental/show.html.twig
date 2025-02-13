@@ -35,23 +35,26 @@
         <table class="rental-table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Logement</th>
                     <th>Date de début</th>
                     <th>Date de fin</th>
+                    <th>Clien</th>
                     <th>Nombre d'adultes</th>
                     <th>Nombre d'enfants</th>
+                    <th>Tel</th>
+
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ rental.id }}</td>
                     <td>{{ rental.logement.label }}</td>
                     <td>{{ rental.dateStart|date('d/m/Y') }}</td>
                     <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                    <td>{{ lastname }}</td>
                     <td>{{ rental.nbAdulte }}</td>
                     <td>{{ rental.nbChild }}</td>
+                    <td>{{ phone }}</td>
                     <td>
                         <a href="{{ path('app_rental_edit', {'id': rental.id}) }}" class="btn-edit">Modifier</a>
                         <form action="{{ path('app_rental_delete', {'id': rental.id}) }}" method="post" class="delete-form">
