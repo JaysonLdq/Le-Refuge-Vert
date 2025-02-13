@@ -55,7 +55,8 @@ class AppFixtures extends Fixture
                 'password'=>'admin',
                 'firstname' => 'Admin',
                 'lastname' => 'Admin',
-                'roles' => ['ROLE_ADMIN']
+                'roles' => ['ROLE_ADMIN'],
+                'phone' => '0606060606'
             
             ],
             [
@@ -63,7 +64,8 @@ class AppFixtures extends Fixture
                 'password' => 'user',
                 'firstname' => 'User',
                 'lastname' => 'User',
-                'roles' => ['ROLE_USER']
+                'roles' => ['ROLE_USER'],
+                'phone' => '0606060606',
             ]
         ];
 
@@ -77,6 +79,7 @@ class AppFixtures extends Fixture
             $user->setFirstname($value['firstname']);
             $user->setLastname($value['lastname']);
             $user->setRoles($value['roles']);
+            $user->setPhone($value['phone']);
             //on persiste les données
             $manager->persist($user);
         }

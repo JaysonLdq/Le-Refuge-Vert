@@ -133,9 +133,8 @@ class HomeController extends AbstractController
                     $em->persist($reservation);
                     $em->flush();
     
-                    // Redirection après validation
-                    $this->addFlash('success', 'Réservation confirmée avec succès!');
-                    return $this->redirectToRoute('home');
+                
+                    return $this->redirectToRoute('reservation_page', ['id' => $reservation->getId()]);
                 }
             }
         }
@@ -249,7 +248,7 @@ public function update(
 
                 // Ajouter un message de succès et rediriger vers la page d'accueil
                 $this->addFlash('success', 'Réservation confirmée avec succès!');
-                return $this->redirectToRoute('home');
+               
             }
         }
     }
