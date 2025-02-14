@@ -1,0 +1,32 @@
+
+    
+
+{{ form_start(form, { 'attr': { 'class':'game-form' } }) }}
+{{ form_errors(form) }}
+
+<div class="form-group">
+    {{form_label(form.price)}}
+    {{form_widget(form.price)}}
+    {{form_errors(form.price)}}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.logement) }}  <!-- Le champ entier 'logement' -->
+    {{ form_widget(form.logement) }}  <!-- Widget pour le champ 'logement' -->
+    {{ form_errors(form.logement) }}  <!-- Affichage des erreurs pour 'logement' -->
+</div>
+
+<div class="form-group">
+    {{ form_label(form.saison) }}  <!-- Le champ entier 'saison' -->
+    {{ form_widget(form.saison) }}  <!-- Widget pour le champ 'saison' -->
+    {{ form_errors(form.saison) }}  <!-- Affichage des erreurs pour 'saison' -->
+</div>
+
+<div class="form-group">
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+</div>
+
+
+
+{{ form_end(form) }}
+

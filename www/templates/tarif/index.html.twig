@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tarif index{% endblock %}
+
+{% block body %}
+    <h1>Tarif index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Price</th>
+                <th>Logement</th>
+                <th>Saison</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tarif in tarifs %}
+            <tr>
+                <td>{{ tarif.price }}€</td>
+                <!-- Affiche le label du logement -->
+                <td>{{ tarif.logement.label }}</td> 
+                <!-- Affiche le label de la saison -->
+                <td>{{ tarif.saison.label }}</td> 
+                <td>
+                    <a href="{{ path('app_tarif_show', {'id': tarif.id}) }}">Show</a>
+                    <a href="{{ path('app_tarif_edit', {'id': tarif.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tarif_new') }}">Create new</a>
+{% endblock %}
