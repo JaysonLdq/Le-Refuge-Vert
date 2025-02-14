@@ -1,4 +1,31 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+
+{{ form_start(form, { 'attr': { 'class':'game-form' } }) }}
+{{ form_errors(form) }}
+
+<div class="form-group">
+    {{form_label(form.label)}}
+    {{form_widget(form.label)}}
+    {{form_errors(form.label)}}
+</div>
+
+<div class="form-group">
+    {{form_label(form.dateS)}}
+    {{form_widget(form.dateS)}}
+    {{form_errors(form.dateS)}}
+</div>
+
+<div class="form-group">
+    {{form_label(form.dateE)}}
+    {{form_widget(form.dateE)}}
+    {{form_errors(form.dateE)}}
+</div>
+
+<div class="form-group">
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+</div>
+
+
+
 {{ form_end(form) }}
+

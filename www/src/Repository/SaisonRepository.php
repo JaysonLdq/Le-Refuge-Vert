@@ -64,6 +64,15 @@ class SaisonRepository extends ServiceEntityRepository
         ->getOneOrNullResult();
 }
 
+public function findSeasonById($id): ?Saison
+{
+    return $this->createQueryBuilder('s')
+        ->where('s.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
+
     
 
     

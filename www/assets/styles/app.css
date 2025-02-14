@@ -1204,6 +1204,183 @@ a:hover {
     text-decoration: underline;
 }
 
+/* --- Tableaux --- */
+table {
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 12px 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* Style des en-têtes de tableau */
+table th {
+    background-color: #416642; /* Un vert agréable */
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Ligne de survol */
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Style pour les lignes impaires */
+table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Messages quand il n'y a pas de saisons */
+table td[colspan="5"] {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+/* --- Boutons --- */
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Vert doux */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #388e3c;
+}
+
+/* --- Alertes --- */
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 30px;
+}
+
+/* --- En-tête de la page --- */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+/* --- Conteneur principal --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* --- Vignettes --- */
+.card {
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 15px;
+    background-color: #afd7a9;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* --- Liens --- */
+.logement-item-link {
+    text-decoration: none;
+    color: #333;
+}
+
+.logement-item-link:hover {
+    text-decoration: none;
+    color: #555454;
+}
+
+/* --- Navbar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #416642;
+    padding: 15px 30px;
+    color: white;
+}
+
+.navbar-logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-links ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+/* --- Footer --- */
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+}
+
+
+
+
+
 
 
 

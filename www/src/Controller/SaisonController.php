@@ -53,22 +53,26 @@ final class SaisonController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_saison_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Saison $saison, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(SaisonType::class, $saison);
-        $form->handleRequest($request);
+public function edit(Request $request, Saison $saison, EntityManagerInterface $entityManager): Response
+{
+    // Utilise directement l'ID passé dans l'URL
+    $id = $saison->getId(); // Pas besoin de chercher à nouveau la saison via le repository
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    $form = $this->createForm(SaisonType::class, $saison);
+    $form->handleRequest($request);
 
-            return $this->redirectToRoute('app_saison_index', [], Response::HTTP_SEE_OTHER);
-        }
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
 
-        return $this->render('saison/edit.html.twig', [
-            'saison' => $saison,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_saison_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->render('saison/edit.html.twig', [
+        'saison' => $saison,
+        'form' => $form->createView(), // Assure-toi de passer le formulaire à la vue
+    ]);
+}
+
 
     #[Route('/{id}', name: 'app_saison_delete', methods: ['POST'])]
     public function delete(Request $request, Saison $saison, EntityManagerInterface $entityManager): Response

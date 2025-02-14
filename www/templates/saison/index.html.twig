@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Liste des Saisons</h1>
 
+    <!-- Bouton pour créer une nouvelle saison -->
+            <tr>
+                <td colspan="5">
+                    <a href="{{ path('app_saison_new') }}" class="btn btn-primary">Créer une nouvelle saison</a>
+                </td>
+            </tr>
+
     <table>
         <thead>
             <tr>
@@ -24,14 +31,28 @@
                         <!-- Bouton pour sélectionner cette saison -->
                         <form action="{{ path('app_saison_select', {id: saison.id}) }}" method="POST">
                             <button type="submit" class="btn btn-primary">Appliquer à tous les tarifs</button>
+                            <!-- Bouton pour modifier une saison -->
+                            <a href="{{ path('app_saison_edit', {id: saison.id}) }}" class="btn btn-primary">Modifier</a>
+                            <!-- Bouton pour supprimer une saison -->
+                            <a href="{{ path('app_saison_delete', {id: saison.id}) }}" class="btn btn-primary">Supprimer</a>
+
                         </form>
+                          
+            <tr>
+              
                     </td>
                 </tr>
+
+              
             {% else %}
                 <tr>
                     <td colspan="5">Aucune saison trouvée</td>
                 </tr>
             {% endfor %}
+
+            
+
         </tbody>
     </table>
+     <a href="/admin/dashboard" class="add-logement-btn">Retour au dashboard</a>
 {% endblock %}
