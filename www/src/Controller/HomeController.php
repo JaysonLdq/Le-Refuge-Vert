@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\User;
@@ -30,33 +29,48 @@ class HomeController extends AbstractController
         TarifRepository $tarifRepository,
         EntityManagerInterface $em
     ): Response {
-        
-        // Récupération de la saison actuelle
-        $saisonActuelle = $saisonRepository->findSeason() ??
-            $saisonRepository->findOneBy(['label' => ['Haute saison', 'Basse saison', 'Hors saison']]);
-
-        // Création d'une saison par défaut si aucune trouvée
+        // Récupérer la saison active (celle qui correspond à la période actuelle)
+        $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate(); // Tu peux utiliser la méthode que tu as déjà dans le SaisonRepository
+    
         if (!$saisonActuelle) {
-            $saisonActuelle = new Saison();
-            $saisonActuelle->setLabel("Haute saison");
-            $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
-            $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
-            $em->persist($saisonActuelle);
-            $em->flush();
+            // Si aucune saison active n'est trouvée, définir une saison par défaut (par exemple Haute saison)
+            $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
         }
-
-        // Récupération des logements et de leur tarif
+    
+        // Récupérer tous les tarifs existants
+        $tarifs = $tarifRepository->findAll();
+    
+        // Mettre à jour les tarifs avec la saison active
+        foreach ($tarifs as $tarif) {
+            // Mettre à jour la saison pour chaque tarif si la saison du tarif ne correspond pas déjà à la saison actuelle
+            if ($tarif->getSaison() !== $saisonActuelle) {
+                $tarif->setSaison($saisonActuelle);
+                $em->persist($tarif); // Persist les changements
+            }
+        }
+    
+        // Sauvegarder les changements dans la base de données
+        $em->flush();
+    
+        // Récupérer tous les logements et leur prix pour l'affichage
         $logements = $logementRepository->findAll();
+    
+        // Mettre à jour les prix des logements en fonction des tarifs actuels
         $logementsAvecPrix = array_map(function($logement) use ($tarifRepository, $saisonActuelle) {
-            $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
-            return ['logement' => $logement, 'price' => $tarif ? $tarif->getPrice() : "Tarif indisponible"];
+            $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
+            $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+            return ['logement' => $logement, 'price' => $price];
         }, $logements);
-
+    
         return $this->render('home/index.html.twig', [
-            'saison' => $saisonActuelle,
-            'logementsAvecPrix' => $logementsAvecPrix
+            'saison' => $saisonActuelle,  // Affichage de la saison actuelle
+            'logementsAvecPrix' => $logementsAvecPrix,
         ]);
     }
+    
+
+    
+
 
     #[Route('/logement/{id}', name: 'logement_detail', methods: ['GET', 'POST'])]
     public function logementById(
@@ -73,9 +87,11 @@ class HomeController extends AbstractController
             throw $this->createNotFoundException('Logement non trouvé');
         }
     
-        $saisonActuelle = $saisonRepository->findSeason() ??
-            $saisonRepository->findOneBy(['label' => 'Haute saison']);
-    
+        // Récupérer la saison actuelle
+        $saisonActuelle = $saisonRepository->findSeason();
+        
+
+        // Trouver le tarif pour le logement et la saison actuelle
         $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
         $pricePerNight = $tarif ? $tarif->getPrice() : 0;
     
@@ -92,7 +108,7 @@ class HomeController extends AbstractController
         $totalPrice = 0;
         $error = null;
     
-        // Calcul automatique du nombre de jours AVANT soumission
+        // Calcul automatique du nombre de jours avant soumission
         $dateStart = $reservation->getDateStart();
         $dateEnd = $reservation->getDateEnd();
     
@@ -134,7 +150,6 @@ class HomeController extends AbstractController
                     $em->persist($reservation);
                     $em->flush();
     
-                
                     return $this->redirectToRoute('reservation_page', ['id' => $reservation->getId()]);
                 }
             }
@@ -144,18 +159,15 @@ class HomeController extends AbstractController
             'logement' => $logement,
             'saison' => $saisonActuelle,
             'price' => $pricePerNight,
-            'equipements' => $equipements, // ✅ Equipements ajoutés ici
+            'equipements' => $equipements, 
             'nbDays' => $daysCount,
             'totalPrice' => $totalPrice,
             'reservationForm' => $reservationForm->createView(),
             'error' => $error
         ]);
-
-
     }
-    
 
-#[Route('/reservation/{id}', name: 'reservation_page', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/reservation/{id}', name: 'reservation_page', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
 
 public function update(
     Request $request,
@@ -178,14 +190,7 @@ public function update(
     // Récupérer le logement et la saison actuelle
     $logement = $rental->getLogement();
     $saisonActuelle = $saisonRepository->findSeason();
-    if (!$saisonActuelle) {
-        $saisonActuelle = $saisonRepository->createQueryBuilder('s')
-            ->where('s.label IN (:defaultSeasons)')
-            ->setParameter('defaultSeasons', ['Haute saison', 'Basse saison', 'Hors saison'])
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
+   
 
     // Récupérer le tarif
     $pricePerNight = 0;
@@ -309,3 +314,4 @@ public function delete(Request $request, RentalRepository $rentalRepository, Ent
     ]);
 }
 }
+

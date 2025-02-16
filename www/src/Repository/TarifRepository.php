@@ -18,27 +18,19 @@ class TarifRepository extends ServiceEntityRepository
     
     
     public function findTarif(Logement $logement, Saison $saison): ?Tarif
-{
-    return $this->createQueryBuilder('t')
-        ->where('t.logement = :logement')
-        ->andWhere('t.saison = :saison')
-        ->setParameter('logement', $logement)
-        ->setParameter('saison', $saison)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.logement = :logement')
+            ->andWhere('t.saison = :saison')
+            ->setParameter('logement', $logement)
+            ->setParameter('saison', $saison)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    
 
 
-public function findTarifForLogementAndSaison(Logement $logement, Saison $saison): ?Tarif
-{
-    return $this->createQueryBuilder('t')
-        ->where('t.logement = :logement')
-        ->andWhere('t.saison = :saison')
-        ->setParameter('logement', $logement)
-        ->setParameter('saison', $saison)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
+
 
 
 

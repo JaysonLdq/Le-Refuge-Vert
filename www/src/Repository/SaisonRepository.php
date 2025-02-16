@@ -16,65 +16,31 @@ class SaisonRepository extends ServiceEntityRepository
         parent::__construct($registry, Saison::class);
     }
 
-    public function findSeason(): ?Saison
-{
-    $currentDate = new \DateTime();
-    
-    return $this->createQueryBuilder('s')
-        ->andWhere('s.dateS <= :currentDate')
-        ->andWhere('s.dateE >= :currentDate')
-        ->setParameter('currentDate', $currentDate)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
 
-
-    public function findOrCreateDefaultSeason(): ?Saison
+    public function findAllSeasons(): array
     {
-        // Essayer de trouver la saison actuelle
-        $saisonActuelle = $this->createQueryBuilder('s')
-            ->where('s.dateS <= :now AND s.dateE >= :now')
-            ->setParameter('now', new \DateTime())
+        return $this->createQueryBuilder('s')
             ->getQuery()
-            ->getOneOrNullResult();
-    
-        // Si aucune saison trouvée, créer une saison par défaut
-        if (!$saisonActuelle) {
-            $saisonActuelle = new Saison();
-            $saisonActuelle->setLabel("Haute saison");
-            $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
-            $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
-    
-            // Utilisation du gestionnaire d'entité pour persister l'objet
-            $this->getEntityManager()->persist($saisonActuelle);
-            $this->getEntityManager()->flush();
-        }
-    
-        return $saisonActuelle;
+            ->getResult();
     }
     
-    public function findCurrentSeason(): ?Saison
-{
-    $currentDate = new \DateTime();
-    return $this->createQueryBuilder('s')
-        ->where('s.dateS <= :currentDate')
-        ->andWhere('s.dateE >= :currentDate')
-        ->setParameter('currentDate', $currentDate)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
-
-public function findSeasonById($id): ?Saison
-{
-    return $this->createQueryBuilder('s')
-        ->where('s.id = :id')
-        ->setParameter('id', $id)
-        ->getQuery()
-        ->getOneOrNullResult();
-}
-
+   
+    
     
 
+    public function findSeasonsActiveOnCurrentDate(): ?Saison
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));  // Date actuelle en UTC
+        $currentDate->setTime(0, 0, 0);  // Supprime l'heure, pour ne comparer que les dates
+    
+        // On recherche la saison qui est active à la date actuelle
+        return $this->createQueryBuilder('s')
+            ->where('s.dateS <= :currentDate') // La date de début de la saison doit être avant la date actuelle
+            ->andWhere('s.dateE >= :currentDate') // La date de fin de la saison doit être après la date actuelle
+            ->setParameter('currentDate', $currentDate)
+            ->getQuery()
+            ->getOneOrNullResult(); // Retourne la saison correspondante ou null si aucune saison n'est trouvée
+    }
     
 
 

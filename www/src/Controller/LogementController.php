@@ -25,12 +25,9 @@ class LogementController extends AbstractController
     ): Response {
        
          // Récupération de la saison actuelle
-         $saisonActuelle = $saisonRepository->findOrCreateDefaultSeason();
+         $saisonActuelle = $saisonRepository->findSeason();
 
-        // Si aucune saison actuelle n'est trouvée, rechercher une saison par défaut
-        if (!$saisonActuelle) {
-            $saisonActuelle = $saisonRepository->createDefaultSeason($em);
-        }
+       
 
         // Récupération des logements avec leurs prix associés
         $logementsAvecPrix = $logementRepository->findAllWithPrices($tarifRepository, $saisonActuelle);

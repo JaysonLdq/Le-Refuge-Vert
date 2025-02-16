@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="container mt-4">
+    <h1>Saison actuelle : {{ saison.label }}</h1>
         
         {% if saison and saison.label == 'hors_saison' %}
             <div class="alert alert-warning text-center">
@@ -19,9 +20,10 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ logement.logement.label }}</h5>
                                 <p class="card-text">{{ logement.logement.description }}</p>
-                                <p>Prix : {{ logement.price }} €</p>  {# Affichage du prix #}
+                                <p>Prix : {{ logement.price }} €/nuits</p>
+                                
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </a>
                 {% else %}
