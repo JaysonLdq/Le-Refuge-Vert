@@ -147,9 +147,6 @@ public function logementById(
         $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
     }
 
-    // Vérifier si la saison est "Hors saison"
-    $isOffSeason = $saisonActuelle->getLabel() === 'Hors saison';
-
     // Trouver le tarif pour le logement et la saison actuelle
     $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
     $pricePerNight = $tarif ? $tarif->getPrice() : 0;
@@ -187,16 +184,21 @@ public function logementById(
         $totalPrice = $daysCount * $pricePerNight;
     }
 
-    // Si la saison est "Hors saison", interdire la réservation et ajouter un message
-    if ($isOffSeason) {
-        $nextSeasonStartDate = $saisonRepository->findOneBy(['label' => 'Haute saison'])->getDateS();
+    // Récupérer la période "Hors saison"
+    $offSeasonStart = $saisonRepository->findOneBy(['label' => 'Hors saison']) ? $saisonRepository->findOneBy(['label' => 'Hors saison'])->getDateS() : null;
+    $offSeasonEnd = $saisonRepository->findOneBy(['label' => 'Hors saison']) ? $saisonRepository->findOneBy(['label' => 'Hors saison'])->getDateE() : null;
+    $nextSeasonStartDate = $saisonRepository->findOneBy(['label' => 'Haute saison'])->getDateS();
+    dump($offSeasonStart, $offSeasonEnd, $nextSeasonStartDate);
+
+    // Vérifier si les dates choisies sont dans la période "Hors saison"
+    if ($offSeasonStart && $offSeasonEnd && $dateStart >= $offSeasonStart && $dateEnd <= $offSeasonEnd) {
         $reservationForm->addError(new FormError(
-            'Vous ne pourrez pas réserver avant le ' . $nextSeasonStartDate->format('d-m-Y')
+            'Vous ne pouvez pas réserver pour cette période. Veuillez choisir une autre date a partir du '  . $nextSeasonStartDate->format('d-m-Y')
         ));
     }
 
     // Gestion de la soumission du formulaire
-    if ($reservationForm->isSubmitted() && $reservationForm->isValid() && !$isOffSeason) {
+    if ($reservationForm->isSubmitted() && $reservationForm->isValid()) {
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour réserver.');
@@ -243,6 +245,8 @@ public function logementById(
         'error' => $error
     ]);
 }
+
+
 
 #[Route('/reservation/{id}', name: 'reservation_page', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
 public function update(
