@@ -4,13 +4,10 @@
 
 {% block body %}
     <div class="container mt-4">
-    <h1>Saison actuelle : {{ saison.label }}</h1>
+    {# Decommenter pour la démo #}
+    {# <h1>Saison actuelle : {{ saison.label }}</h1> #}
         
-        {% if saison and saison.label == 'hors_saison' %}
-            <div class="alert alert-warning text-center">
-                <strong>Aucune réservation pour la période de hors saison</strong>
-            </div>
-        {% else %}
+        
             <div class="row">
                 {% for logement in logementsAvecPrix %}
                 <a href="{{ path('logement_detail', { id: logement.logement.id }) }}" class="logement-item-link">
@@ -30,6 +27,6 @@
                     <p class="text-center">Aucun logement disponible.</p>
                 {% endfor %}
             </div>
-        {% endif %}
+       
     </div>
 {% endblock %}

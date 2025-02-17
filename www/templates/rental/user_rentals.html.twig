@@ -1,0 +1,122 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Mes Réservations
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Mes Réservations</h1>
+
+        <!-- Réservations à venir (en excluant celles en cours) -->
+        <h2>Réservations à venir</h2>
+        {% if upcomingRentals is not empty %}
+            <table class="rental-table">
+                <thead>
+                    <tr>
+                        <th>Logement</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Client</th>
+                        <th>Nombre d'adultes</th>
+                        <th>Nombre d'enfants</th>
+                        <th>Tel</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in upcomingRentals %}
+                        <tr>
+                            <td>{{ rental.logement.label }}</td>
+                            <td>{{ rental.dateStart|date('d/m/Y') }}</td>
+                            <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                            <td>{{ lastname }}</td>
+                            <td>{{ rental.nbAdulte }}</td>
+                            <td>{{ rental.nbChild }}</td>
+                            <td>{{ phone }}</td>
+                            <td>
+                                {% if rental in rentalsWithCancelButton %}
+                                    <form action="{{ path('app_rental_delete', {'id': rental.id}) }}" method="post" class="delete-form">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rental.id) }}">
+                                        <button type="submit" class="btn-delete" onclick="return confirm('Annuler cette réservation ?');">Annuler</button>
+                                    </form>
+                                {% else %}
+                                    <span>Annulation non disponible</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucune réservation à venir.</p>
+        {% endif %}
+
+        <!-- Réservations en cours -->
+        <h2>Réservations en cours</h2>
+        {% if currentRentals is not empty %}
+            <table class="rental-table">
+                <thead>
+                    <tr>
+                        <th>Logement</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Client</th>
+                        <th>Nombre d'adultes</th>
+                        <th>Nombre d'enfants</th>
+                        <th>Tel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in currentRentals %}
+                        <tr>
+                            <td>{{ rental.logement.label }}</td>
+                            <td>{{ rental.dateStart|date('d/m/Y') }}</td>
+                            <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                            <td>{{ lastname }}</td>
+                            <td>{{ rental.nbAdulte }}</td>
+                            <td>{{ rental.nbChild }}</td>
+                            <td>{{ phone }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucune réservation en cours.</p>
+        {% endif %}
+
+        <!-- Réservations passées -->
+        <h2>Réservations passées</h2>
+        {% if pastRentals is not empty %}
+            <table class="rental-table">
+                <thead>
+                    <tr>
+                        <th>Logement</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Client</th>
+                        <th>Nombre d'adultes</th>
+                        <th>Nombre d'enfants</th>
+                        <th>Tel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rental in pastRentals %}
+                        <tr>
+                            <td>{{ rental.logement.label }}</td>
+                            <td>{{ rental.dateStart|date('d/m/Y') }}</td>
+                            <td>{{ rental.dateEnd|date('d/m/Y') }}</td>
+                            <td>{{ lastname }}</td>
+                            <td>{{ rental.nbAdulte }}</td>
+                            <td>{{ rental.nbChild }}</td>
+                            <td>{{ phone }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucune réservation passée.</p>
+        {% endif %}
+    </div>
+    <button class="back-button" onclick="window.history.back()">Retour</button>
+{% endblock %}

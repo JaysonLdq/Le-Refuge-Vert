@@ -6,12 +6,13 @@
     <div class="dashboard-container">
         <h1 class="dashboard-title">Dashboard</h1>
         <h2 class="dashboard-greeting">Hello {{ app.user.firstname }}!</h2>
+       
         <div class="action-buttons">
             <a href="{{ path('app_logement') }}" class="btn btn-view-locations">Voir les locations</a>
             <a href="{{ path('app_rental_list') }}" class="btn btn-view-reservations">Voir les reservations</a>
             <a href="{{ path('app_user_index') }}"  class="btn btn-manage-users">Gérer les utilisateurs</a>
-            <a href="{{ path('app_saison_index')}}">Gérer les saions</a>
-            <a href="{{ path('app_tarif_index')}}">Gérer les tarifs</a>
+            <a href="{{ path('app_saison_index' )}}" class="btn btn-manage-saison">Gérer les saions</a>
+            <a href="{{ path('app_tarif_index')}}" class="btn btn-manage-tarif">Gérer les tarifs</a>
             
         </div>
     </div>

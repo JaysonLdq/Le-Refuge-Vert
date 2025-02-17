@@ -56,7 +56,7 @@ class RentalController extends AbstractController
     public function show(Rental $rental, SaisonRepository $saisonRepository, TarifRepository $tarifRepository, EntityManagerInterface $em, LogementRepository $logementRepository): Response
     {
         $user = $this->getUser();
-
+    
         // Vérifie si l'utilisateur est bien une instance de User
         if ($user instanceof User) {
             $firstname = $user->getFirstname();
@@ -66,30 +66,34 @@ class RentalController extends AbstractController
             $firstname = null;
             $lastname = null;
         }
-
+    
         // Récupérer le logement associé à la réservation
         $logement = $rental->getLogement();
         if (!$logement) {
             throw $this->createNotFoundException('Logement non trouvé');
         }
-
-        $saisonActuelle = $saisonRepository->findSeason();
-
+    
+        // Récupérer la saison active (celle qui correspond à la période actuelle)
+        $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate();
+    
         if (!$saisonActuelle) {
-            // Logique de secours si aucune saison n'est trouvée, ou gérer l'erreur
-            $saisonActuelle = new Saison();
-            $saisonActuelle->setLabel("Haute saison");
-            $saisonActuelle->setDateS(new \DateTime("2024-06-01"));
-            $saisonActuelle->setDateE(new \DateTime("2024-09-01"));
-        
-            $em->persist($saisonActuelle);
-            $em->flush();
+            // Si aucune saison active n'est trouvée, définir une saison par défaut
+            $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
         }
-        
-        // Récupérer le tarif du logement en fonction de la saison
+    
+        // Récupérer le tarif du logement en fonction de la saison active
         $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
         $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
-
+    
+        // Appliquer un ajustement de prix en fonction de la saison
+        if ($saisonActuelle->getLabel() === 'Haute saison' && $tarif) {
+            $price = $tarif->getPrice() * 1.2;  // Appliquer une augmentation de 20% pour la haute saison
+        }
+    
+        if ($saisonActuelle->getLabel() === 'Basse saison' && $tarif) {
+            $price = number_format($tarif->getPrice() / 1.2, 2);  // Appliquer une réduction de 20% pour la basse saison
+        }
+    
         return $this->render('rental/show.html.twig', [
             'rental' => $rental,
             'logement' => $logement,
@@ -98,9 +102,10 @@ class RentalController extends AbstractController
             'firstname' => $firstname,
             'lastname' => $lastname,
             'phone' => $phone,
+            'saison' => $saisonActuelle,  // Passer la saison actuelle à la vue
         ]);
     }
-
+    
     //  Formulaire pour créer une nouvelle réservation
     #[Route('/admin/rental/new', name: 'app_rental_new', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
@@ -172,4 +177,76 @@ class RentalController extends AbstractController
             'rental' => $rental,
         ]);
     }
+
+   // Afficher les réservations d'un utilisateur
+#[Route('/rentals', name: 'app_user_rentals', methods: ['GET'])]
+public function userRentals(RentalRepository $rentalRepository): Response
+{
+    $user = $this->getUser();
+
+    // Vérifie si l'utilisateur est bien une instance de User
+    if ($user instanceof User) {
+        $firstname = $user->getFirstname();
+        $lastname = $user->getLastname();
+        $phone = $user->getPhone();
+    } else {
+        $firstname = null;
+        $lastname = null;
+    }
+
+    // Récupérer toutes les réservations de l'utilisateur connecté
+    $rentals = $rentalRepository->findBy(['users' => $user]);
+
+    // Récupérer la date actuelle
+    $currentDate = new \DateTime();
+
+    // Créer des tableaux pour les différentes catégories de réservations
+    $upcomingRentals = [];
+    $currentRentals = [];
+    $pastRentals = [];
+
+    foreach ($rentals as $rental) {
+        // Vérifier si la réservation est en cours
+        $isBetweenDates = $currentDate >= $rental->getDateStart() && $currentDate <= $rental->getDateEnd();
+
+        // Si la réservation est en cours
+        if ($isBetweenDates) {
+            $currentRentals[] = $rental;
+        } 
+        // Si la réservation est à venir
+        elseif ($rental->getDateStart() > $currentDate) {
+            $upcomingRentals[] = $rental;
+        } 
+        // Si la réservation est passée
+        else {
+            $pastRentals[] = $rental;
+        }
+    }
+
+   // Créer une variable pour savoir si le bouton de suppression doit être affiché
+$rentalsWithCancelButton = [];
+foreach ($upcomingRentals as $rental) {
+    // Vérifie la différence de dates entre la date actuelle et la date de fin de la réservation
+    $dateDiff = $currentDate->diff($rental->getDateEnd());
+
+    // Si la différence en jours est supérieure à 2 jours (soit plus de 48 heures)
+    $isBetweenDates = $currentDate >= $rental->getDateStart() && $currentDate <= $rental->getDateEnd();
+
+    if ($dateDiff->days > 2 && !$isBetweenDates) {
+        // Ajouter la réservation à la liste avec le bouton de suppression
+        $rentalsWithCancelButton[] = $rental;
+    }
+}
+
+
+    return $this->render('rental/user_rentals.html.twig', [
+        'upcomingRentals' => $upcomingRentals,
+        'currentRentals' => $currentRentals,
+        'pastRentals' => $pastRentals,
+        'rentalsWithCancelButton' => $rentalsWithCancelButton,
+        'lastname' => $lastname,
+        'phone' => $phone,
+    ]);
+}
+
 }

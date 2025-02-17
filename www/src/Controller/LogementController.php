@@ -23,20 +23,43 @@ class LogementController extends AbstractController
         TarifRepository $tarifRepository,
         EntityManagerInterface $em
     ): Response {
-       
-         // Récupération de la saison actuelle
-         $saisonActuelle = $saisonRepository->findSeason();
-
-       
-
-        // Récupération des logements avec leurs prix associés
-        $logementsAvecPrix = $logementRepository->findAllWithPrices($tarifRepository, $saisonActuelle);
-
+    
+        // Récupérer la saison active (celle qui correspond à la période actuelle)
+        $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate();
+    
+        if (!$saisonActuelle) {
+            // Si aucune saison active n'est trouvée, définir une saison par défaut
+            $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
+        }
+    
+        // Récupérer les logements avec leurs prix associés
+        $logements = $logementRepository->findAll();
+    
+        // Appliquer la saison aux tarifs des logements
+        $logementsAvecPrix = array_map(function($logement) use ($tarifRepository, $saisonActuelle) {
+            $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
+            $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+    
+            // Si la saison est la haute saison, appliquer une augmentation de 20%
+            if ($saisonActuelle->getLabel() === 'Haute saison' && $tarif) {
+                $price = $tarif->getPrice() * 1.2;  // Augmenter de 20%
+            }
+    
+            // Si la saison est la basse saison, appliquer une réduction de 20%
+            if ($saisonActuelle->getLabel() === 'Basse saison' && $tarif) {
+                $price = number_format($tarif->getPrice() / 1.2, 2);  // Réduire de 20%
+            }
+    
+            return ['logement' => $logement, 'price' => $price];
+        }, $logements);
+    
+        // Passer la saison active et les logements avec leurs prix à la vue
         return $this->render('logement/index.html.twig', [
-            'saison' => $saisonActuelle,
+            'saison' => $saisonActuelle,  // Affichage de la saison actuelle
             'logements' => $logementsAvecPrix
         ]);
     }
+    
 
     #[Route('/admin/logement/delete/{id}', name: 'app_logement_delete', methods: ['POST'])]
     public function delete(LogementRepository $logementRepository, Logement $logement, Request $request): Response

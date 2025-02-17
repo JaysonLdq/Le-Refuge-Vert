@@ -138,6 +138,9 @@ public function logementById(
         $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
     }
 
+    // Vérifier si la saison est "Hors saison"
+    $isOffSeason = $saisonActuelle->getLabel() === 'Hors saison';
+
     // Trouver le tarif pour le logement et la saison actuelle
     $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
     $pricePerNight = $tarif ? $tarif->getPrice() : 0;
@@ -175,8 +178,16 @@ public function logementById(
         $totalPrice = $daysCount * $pricePerNight;
     }
 
+    // Si la saison est "Hors saison", interdire la réservation et ajouter un message
+    if ($isOffSeason) {
+        $nextSeasonStartDate = $saisonRepository->findOneBy(['label' => 'Haute saison'])->getDateS();
+        $reservationForm->addError(new FormError(
+            'Vous ne pourrez pas réserver avant le début de la Haute saison, qui commence le ' . $nextSeasonStartDate->format('d-m-Y')
+        ));
+    }
+
     // Gestion de la soumission du formulaire
-    if ($reservationForm->isSubmitted() && $reservationForm->isValid()) {
+    if ($reservationForm->isSubmitted() && $reservationForm->isValid() && !$isOffSeason) {
         $user = $this->getUser();
         if (!$user) {
             $this->addFlash('error', 'Vous devez être connecté pour réserver.');
@@ -223,7 +234,6 @@ public function logementById(
         'error' => $error
     ]);
 }
-
 
 #[Route('/reservation/{id}', name: 'reservation_page', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
 public function update(

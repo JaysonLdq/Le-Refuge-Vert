@@ -436,6 +436,14 @@ h1 {
     background: #e74c3c;
 }
 
+.btn-manage-saison {
+    background: #d6db33;
+}
+
+.btn-manage-tarif {
+    background: #bd3fd0;
+}
+
 /* HOVER EFFECT */
 .btn:hover {
     opacity: 0.8;
