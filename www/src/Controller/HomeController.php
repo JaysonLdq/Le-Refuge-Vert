@@ -19,102 +19,111 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(
-        SaisonRepository $saisonRepository, 
-        LogementRepository $logementRepository, 
-        TarifRepository $tarifRepository,
-        EntityManagerInterface $em
-    ): Response {
-        // Récupérer la saison active (celle qui correspond à la période actuelle)
-        $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate(); 
-    
-        if (!$saisonActuelle) {
-            // Si aucune saison active n'est trouvée, définir une saison par défaut (par exemple Haute saison)
-            $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
-        }
-    
-        // Récupérer tous les tarifs existants
-        $tarifs = $tarifRepository->findAll();
-    
-        // Mettre à jour les tarifs avec la saison active
-        foreach ($tarifs as $tarif) {
-            // Mettre à jour la saison pour chaque tarif si la saison du tarif ne correspond pas déjà à la saison actuelle
-            if ($tarif->getSaison() !== $saisonActuelle) {
-                $tarif->setSaison($saisonActuelle);
-                $em->persist($tarif); // Persist les changements
-            }
-        }
-    
-        // Sauvegarder les changements dans la base de données
-        $em->flush();
-    
-        // Récupérer tous les logements et leur prix pour l'affichage
-        $logements = $logementRepository->findAll();
-    
-        // Mettre à jour les prix des logements en fonction des tarifs actuels
-        $logementsAvecPrix = array_map(function($logement) use ($tarifRepository, $saisonActuelle) {
-            $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
-            $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+public function index(
+    SaisonRepository $saisonRepository, 
+    LogementRepository $logementRepository, 
+    TarifRepository $tarifRepository,
+    EntityManagerInterface $em,
+    Request $request
+): Response {
+    // Récupérer la saison active (celle qui correspond à la période actuelle)
+    $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate(); 
 
-            // Si la saison est la haute saison, appliquer une augmentation de 20%
-        if ($saisonActuelle->getLabel() === 'Haute saison' && $tarif) {
-            $price = $tarif->getPrice() * 1.2;  // Augmenter de 20%
-        }
-
-            // Si la saison est la haute saison, appliquer une augmentation de 20%
-            if ($saisonActuelle->getLabel() === 'Basse saison' && $tarif) {
-                $price = number_format($tarif->getPrice() / 1.2, 2);
-            }
-
-
-            return ['logement' => $logement, 'price' => $price];
-        }, $logements);
-    
-        return $this->render('home/index.html.twig', [
-            'saison' => $saisonActuelle,  // Affichage de la saison actuelle
-            'logementsAvecPrix' => $logementsAvecPrix,
-        ]);
+    if (!$saisonActuelle) {
+        $saisonActuelle = $saisonRepository->findOneBy(['label' => 'Haute saison']);
     }
+
+    // Récupérer tous les tarifs existants
+    $tarifs = $tarifRepository->findAll();
+
+    // Mettre à jour les tarifs avec la saison active
+    foreach ($tarifs as $tarif) {
+        if ($tarif->getSaison() !== $saisonActuelle) {
+            $tarif->setSaison($saisonActuelle);
+            $em->persist($tarif); 
+        }
+    }
+    $em->flush();
+
+    // Récupérer tous les logements
+    $logements = $logementRepository->findAll();
+
+    // Filtrage des logements par prix croissant ou décroissant
+    $priceOrder = $request->query->get('price_order', 'asc'); // asc par défaut
+    if ($priceOrder === 'desc') {
+        usort($logements, function($a, $b) use ($tarifRepository, $saisonActuelle) {
+            $priceA = $tarifRepository->findTarif($a, $saisonActuelle)->getPrice();
+            $priceB = $tarifRepository->findTarif($b, $saisonActuelle)->getPrice();
+            return $priceB <=> $priceA;
+        });
+    } else {
+        usort($logements, function($a, $b) use ($tarifRepository, $saisonActuelle) {
+            $priceA = $tarifRepository->findTarif($a, $saisonActuelle)->getPrice();
+            $priceB = $tarifRepository->findTarif($b, $saisonActuelle)->getPrice();
+            return $priceA <=> $priceB;
+        });
+    }
+
+    // Filtrer par type de logement si sélectionné
+    $typeFilter = $request->query->get('type', null);
+    if ($typeFilter) {
+        $logements = array_filter($logements, function($logement) use ($typeFilter) {
+            return $logement->getLabel() === $typeFilter;
+        });
+    }
+
+    // Filtrer par disponibilité
+    $dateStart = $request->query->get('date_start');
+    $dateEnd = $request->query->get('date_end');
+    if ($dateStart && $dateEnd) {
+        $dateStart = new \DateTime($dateStart);
+        $dateEnd = new \DateTime($dateEnd);
+
+        // Filtrer les logements en fonction de la disponibilité
+        $logements = array_filter($logements, function($logement) use ($dateStart, $dateEnd) {
+            // Récupérer les réservations du logement
+            $reservations = $logement->getRentals();  
+            
+            foreach ($reservations as $reservation) {
+                $reservationStart = $reservation->getDateStart();
+                $reservationEnd = $reservation->getDateEnd();
+
+                // Vérifie si les dates de début et de fin se chevauchent
+                if (($dateStart >= $reservationStart && $dateStart <= $reservationEnd) || 
+                    ($dateEnd >= $reservationStart && $dateEnd <= $reservationEnd)) {
+                    return false; // Le logement est réservé pendant cette période
+                }
+            }
+            return true; // Le logement est disponible
+        });
+    }
+
+    // Récupérer les prix des logements en fonction des tarifs actuels
+    $logementsAvecPrix = array_map(function($logement) use ($tarifRepository, $saisonActuelle) {
+        $tarif = $tarifRepository->findTarif($logement, $saisonActuelle);
+        $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
+
+        // Ajuster le prix en fonction de la saison
+        if ($saisonActuelle->getLabel() === 'Haute saison' && $tarif) {
+            $price = $tarif->getPrice() * 1.2;  // Augmentation de 20% pour la haute saison
+        }
+
+        if ($saisonActuelle->getLabel() === 'Basse saison' && $tarif) {
+            $price = number_format($tarif->getPrice() / 1.2, 2);  // Réduction de 20% pour la basse saison
+        }
+
+        return ['logement' => $logement, 'price' => $price];
+    }, $logements);
+
+    return $this->render('home/index.html.twig', [
+        'saison' => $saisonActuelle,
+        'logementsAvecPrix' => $logementsAvecPrix,
+    ]);
+}
+
     
 
-// Pour la démo et montrer que ca marche avec les autres saisons
-//  public function index(
-//     SaisonRepository $saisonRepository,
-//     LogementRepository $logementRepository,
-//     TarifRepository $tarifRepository
-// ): Response {
-//     // Récupération de toutes les saisons actives
-//     $saisonActuelle = $saisonRepository->findSeasonsActiveOnCurrentDate();
-
-//     // Débogage de la saison récupérée
-//     dump($saisonActuelle);  // Ceci doit afficher les saisons récupérées
-
-//     if (empty($saisonActuelle)) {
-//         // Si aucune saison n'est trouvée, on dit aucune saison actuelle
-//         $saisonActuelle = $saisonRepository->findOneBy(['label' => 'basse saison']);
-//     }
-
-//     // Récupérer tous les logements
-//     $logements = $logementRepository->findAll();
-
     
-
-//     // Récupérer les tarifs pour chaque logement et la saison actuelle
-//     $logementsAvecPrix = array_map(function($logement) use ($tarifRepository, $saisonActuelle) {
-//         $tarif = $saisonActuelle ? $tarifRepository->findTarif($logement, $saisonActuelle) : null;
-//         $price = $tarif ? $tarif->getPrice() : "Tarif indisponible";
-//         return ['logement' => $logement, 'price' => $price];
-//     }, $logements);
-
-//     return $this->render('home/index.html.twig', [
-//         'saison' => $saisonActuelle,  // Affichage de la saison actuelle
-//         'logementsAvecPrix' => $logementsAvecPrix,
-//     ]);
-// }
-
-    
-
-
 #[Route('/logement/{id}', name: 'logement_detail', methods: ['GET', 'POST'])]
 public function logementById(
     LogementRepository $logementRepository,
@@ -182,7 +191,7 @@ public function logementById(
     if ($isOffSeason) {
         $nextSeasonStartDate = $saisonRepository->findOneBy(['label' => 'Haute saison'])->getDateS();
         $reservationForm->addError(new FormError(
-            'Vous ne pourrez pas réserver avant le début de la Haute saison, qui commence le ' . $nextSeasonStartDate->format('d-m-Y')
+            'Vous ne pourrez pas réserver avant le ' . $nextSeasonStartDate->format('d-m-Y')
         ));
     }
 

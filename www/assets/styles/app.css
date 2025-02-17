@@ -1377,21 +1377,178 @@ h1 {
 .navbar-links a:hover {
     text-decoration: underline;
 }
-
 /* --- Footer --- */
 .footer {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 50px; /* Cette marge peut être ajustée selon tes besoins */
     color: #777;
+    background-color: #416642;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.social-links i {
+    margin-right: 10px;
+}
+
+.social-links a {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.social-links a:hover {
+    color: #007bff;
+}
+
+/* --- Appliquer le style sticky au bas de la page --- */
+html, body {
+    height: 100%;
+    margin: 0;
 }
 
 
 
+/* --- Footer sticky pour coller en bas --- */
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
+/* Style pour le dropdown dans la navbar */
+.navbar-links .dropdown {
+    position: relative;
+}
 
+.navbar-links .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #416642;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    display: none;
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+}
 
+.navbar-links .dropdown:hover .dropdown-menu {
+    display: block;
+}
 
+.navbar-links .dropdown-menu form {
+    display: flex;
+    flex-direction: column;
+}
 
+.navbar-links .dropdown-menu select,
+.navbar-links .dropdown-menu input {
+    margin: 5px 0;
+    padding: 8px;
+    border: 1px solid #416642;
+    border-radius: 5px;
+}
 
+.navbar-links .dropdown-menu button {
+    padding: 8px 12px;
+    background-color: #416642;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navbar-links .dropdown-menu button:hover {
+    background-color: #355336;
+}
+
+/* Style pour le conteneur du formulaire */
+.date-filter {
+    background-color: #f9f9f9; /* Fond clair */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacement entre les éléments */
+}
+
+/* Labels pour les champs */
+.date-filter label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Champs de saisie */
+.date-filter input[type="date"] {
+    width: 100%;
+    padding: 12px; /* Ajuste le padding pour avoir un espacement égal */
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ffffff;
+    transition: border 0.3s ease-in-out;
+    box-sizing: border-box; /* Assure que le padding est pris en compte dans la largeur totale */
+}
+
+/* Effet de focus sur les champs de saisie */
+.date-filter input[type="date"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Bouton de soumission */
+.date-filter button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+/* Effet de survol du bouton */
+.date-filter button[type="submit"]:hover {
+    background-color: #45a049;
+}
 
 

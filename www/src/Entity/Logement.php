@@ -43,6 +43,8 @@ class Logement
     #[ORM\ManyToMany(targetEntity: Equipement::class, inversedBy: 'logements')]
     private Collection $equipements;
 
+    
+
     public function __construct()
     {
         $this->tarifs = new ArrayCollection();
@@ -176,6 +178,14 @@ public function removeEquipement(Equipement $equipement): static
     }
 
     return $this;
+}
+
+/**
+ * @return Collection<int, Rental>
+ */
+public function getRentals(): Collection
+{
+    return $this->rentals;
 }
 
 }

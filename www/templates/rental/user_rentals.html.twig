@@ -36,7 +36,7 @@
                             <td>{{ phone }}</td>
                             <td>
                                 {% if rental in rentalsWithCancelButton %}
-                                    <form action="{{ path('app_rental_delete', {'id': rental.id}) }}" method="post" class="delete-form">
+                                    <form action="{{ path('app_rental_delete_user', {'id': rental.id}) }}" method="post" class="delete-form">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rental.id) }}">
                                         <button type="submit" class="btn-delete" onclick="return confirm('Annuler cette réservation ?');">Annuler</button>
                                     </form>

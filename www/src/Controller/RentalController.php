@@ -249,4 +249,37 @@ foreach ($upcomingRentals as $rental) {
     ]);
 }
 
+// Supprimer une réservation avec confirmation
+#[Route('/rentals/{id}/delete', name: 'app_rental_delete_user', methods: ['GET', 'POST'])]
+public function delete2(RentalRepository $rentalRepository, EntityManagerInterface $entityManager, int $id): Response
+{
+    // Récupère la réservation par son ID
+    $rental = $rentalRepository->find($id);
+
+    // Vérifie si la réservation existe
+    if (!$rental) {
+        throw $this->createNotFoundException('Réservation non trouvée');
+    }
+
+    // Vérifie si l'utilisateur connecté est celui qui a fait la réservation
+    if ($rental->getUsers() !== $this->getUser()) {
+        // Si ce n'est pas le cas, on redirige ou on affiche un message d'erreur
+        $this->addFlash('error', 'Vous ne pouvez pas supprimer une réservation qui ne vous appartient pas.');
+        return $this->redirectToRoute('app_user_rentals');
+    }
+
+    // Si la méthode est POST, supprimer la réservation
+    if ($this->isGranted('ROLE_USER') && $this->getUser()) {
+        $entityManager->remove($rental);
+        $entityManager->flush();
+
+        // Message de succès
+        $this->addFlash('success', 'Réservation supprimée avec succès.');
+    }
+
+    // Redirige vers la liste des réservations de l'utilisateur
+    return $this->redirectToRoute('app_user_rentals');
+}
+
+
 }

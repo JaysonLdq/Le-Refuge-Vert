@@ -6,7 +6,18 @@
     <div class="container mt-4">
     {# Decommenter pour la démo #}
     {# <h1>Saison actuelle : {{ saison.label }}</h1> #}
-        
+<div class="date-filter">
+    <form method="get">
+         <!-- Filtrage par date -->
+            <label for="date_start">Date de début :</label>
+            <input type="date" name="date_start" id="date_start" value="{{ app.request.query.get('date_start') }}">
+
+            <label for="date_end">Date de fin :</label>
+            <input type="date" name="date_end" id="date_end" value="{{ app.request.query.get('date_end') }}">
+
+            <button type="submit">Filtrer</button>
+        </form>
+</div>
         
             <div class="row">
                 {% for logement in logementsAvecPrix %}
