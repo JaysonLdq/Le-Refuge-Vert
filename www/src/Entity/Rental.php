@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RentalRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RentalRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['rental:read']],
+    denormalizationContext: ['groups' => ['rental:write']]
+)]
 class Rental
 {
     #[ORM\Id]
@@ -15,15 +21,19 @@ class Rental
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'rentals')]
+    #[Groups (['rental:read'])]
     private ?User $users = null;
 
     #[ORM\ManyToOne(inversedBy: 'rentals')]
+    #[Groups (['rental:read'])]
     private ?Logement $logement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups (['rental:read'])]
     private ?\DateTimeInterface $dateStart = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups (['rental:read'])]
     private ?\DateTimeInterface $dateEnd = null;
 
     #[ORM\Column]

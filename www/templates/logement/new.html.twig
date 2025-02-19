@@ -42,6 +42,11 @@
         {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
     </div>
 
+    <div class="form-group">
+        {{ form_label(form.tarifs )}}
+        {{ form_widget(form.tarifs, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
     <button type="submit" class="submit-button">Ajouter</button>
 
     {{ form_end(form) }}

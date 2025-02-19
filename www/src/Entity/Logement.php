@@ -2,11 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LogementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['rental:read']],
+    denormalizationContext: ['groups' => ['rental:write']]
+)]
 
 #[ORM\Entity(repositoryClass: LogementRepository::class)]
 class Logement
@@ -14,11 +21,13 @@ class Logement
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups (['rental:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups (['rental:read'])]
     private ?string $label = null;
-
+    
     #[ORM\Column]
     private ?int $surface = null;
 
@@ -42,6 +51,10 @@ class Logement
 
     #[ORM\ManyToMany(targetEntity: Equipement::class, inversedBy: 'logements')]
     private Collection $equipements;
+
+    #[ORM\Column(length: 150)]
+    #[Groups (['rental:read', 'rental:write'])]
+    private ?string $status = null;
 
     
 
@@ -154,38 +167,65 @@ class Logement
     }
 
     /**
- * @return Collection<int, Equipement>
- */
-public function getEquipements(): Collection
-{
-    return $this->equipements;
-}
-
-public function addEquipement(Equipement $equipement): static
-{
-    if (!$this->equipements->contains($equipement)) {
-        $this->equipements->add($equipement);
-        $equipement->addLogement($this);
+     * @return Collection<int, Equipement>
+     */
+    public function getEquipements(): Collection
+    {
+        return $this->equipements;
     }
 
-    return $this;
-}
+    public function addEquipement(Equipement $equipement): static
+    {
+        if (!$this->equipements->contains($equipement)) {
+            $this->equipements->add($equipement);
+            $equipement->addLogement($this);
+        }
 
-public function removeEquipement(Equipement $equipement): static
-{
-    if ($this->equipements->removeElement($equipement)) {
-        $equipement->removeLogement($this);
+        return $this;
     }
 
-    return $this;
-}
+    public function removeEquipement(Equipement $equipement): static
+    {
+        if ($this->equipements->removeElement($equipement)) {
+            $equipement->removeLogement($this);
+        }
 
-/**
- * @return Collection<int, Rental>
- */
-public function getRentals(): Collection
-{
-    return $this->rentals;
-}
+        return $this;
+    }
 
+    /**
+     * @return Collection<int, Rental>
+     */
+    public function getRentals(): Collection
+    {
+        return $this->rentals;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        // Vérification de validité du statut
+        $validStatuses = ['available', 'unavailable', 'pending'];
+        if (in_array($status, $validStatuses)) {
+            $this->status = $status;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Mettre à jour le statut basé sur la réservation
+     * @param string $newStatus
+     */
+    public function updateStatusBasedOnRental(string $newStatus): void
+    {
+        $validStatuses = ['available', 'unavailable', 'pending'];
+        if (in_array($newStatus, $validStatuses)) {
+            $this->status = $newStatus;
+        }
+    }
 }

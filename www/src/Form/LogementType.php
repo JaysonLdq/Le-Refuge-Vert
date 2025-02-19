@@ -4,6 +4,9 @@ namespace App\Form;
 
 use App\Entity\Logement;
 use App\Entity\Equipement;
+use App\Entity\Tarif;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Query\Expr\Select;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -11,7 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\File;
 
 class LogementType extends AbstractType
@@ -45,6 +50,14 @@ class LogementType extends AbstractType
                         'mimeTypesMessage' => 'Merci d\'uploader une image valide (JPEG, PNG, WEBP).',
                     ])
                 ],
+            ])
+            ->add('tarifs', EntityType::class, [
+                'class' => Tarif::class,
+                'choice_label' => 'price',
+                'multiple' => true,
+                'expanded' => false, // Affiche sous forme de menu déroulant avec sélection multiple
+                'label' => 'Tarifs',
+                'attr' => ['class' => 'select-multiple'] // Ajoute une classe CSS pour styliser si nécessaire
             ])
             ->add('equipements', EntityType::class, [
                 'class' => Equipement::class,
